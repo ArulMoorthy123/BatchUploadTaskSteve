@@ -1,0 +1,133 @@
+/* ============================================================
+   Octofilter
+   ============================================================ */
+.octofilter-input {
+  border-radius: 3px;
+  position: relative;
+}
+.octofilter-input i.fa-search-plus {
+  content:"\f00e";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: relative;
+  bottom: -25px;
+  left: 10px;
+}
+.octofilter-input input {
+  border-radius: 5px;
+  padding: 5px 5px 5px 30px ;
+  border: 1px solid #777;
+  width: 100%;
+  margin-top: -6px;
+}
+
+.octofilter-input input:focus {
+  outline: none;
+}
+
+/* Label
+   ============================================================ */
+.octofilter-label {
+  color: #fff;
+  margin: 3px 3px 3px 0;
+  padding: 3px 6px 3px 12px;
+  display: inline-block;
+  background: #00a5c6;
+  border-radius: 20px;
+  font-size: 14px;
+}
+.octofilter-label .octofilter-clear {
+    color: #fff;
+    cursor: pointer;
+    margin-left: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    padding: 1px 6px;
+    line-height: normal;
+}
+.octofilter-label .octofilter-clear:hover  {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Container
+   ============================================================ */
+.octofilter-container {
+  background: #fff;
+  border: 1px solid #a3a3a3;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 2px;
+  display: none;
+}
+
+/* Not Found
+   ============================================================ */
+.octofilter-not-found {
+  color: #c3c3c3; }
+
+/* Tab Content
+   ============================================================ */
+.octofilter-container .tab-content {
+  padding: 10px;
+}
+.octofilter-container .tab-content .tab-pane {
+  display: none;
+}
+.octofilter-container .tab-content .tab-pane.active {
+  display: block;
+}
+.octofilter-container .tab-content .tab-pane a {
+  cursor: pointer;
+  color: #fff;
+  margin: 3px 3px 3px 0;
+  padding: 3px 6px 3px 12px;
+  display: inline-block;
+  background: #3aa63b;
+  border-radius: 20px;
+  font-size: 14px;
+}
+.octofilter-container .tab-content .tab-pane a:after {
+  content: "\f067";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  padding: 4px 6px;
+  line-height: normal;
+  font-size: 12px;
+}
+.octofilter-container .tab-content .tab-pane a:hover:after  {
+  background: rgba(255,255,255,0.3);
+}
+.octofilter-container .tab-content .tab-pane a.octofilter-active {
+  color: #fff;
+  background: #2bb3e7;
+}
+.octofilter-container .tab-content .tab-pane a.octofiltered {
+  cursor: no-drop;
+  color: #fff;
+  margin: 3px 3px 3px 0;
+  padding: 3px 6px 3px 12px;
+  display: inline-block;
+  background: #c3c3c3;
+  border-radius: 20px;
+  font-size: 14px;
+}
+.octofilter-container .tab-content .tab-pane a.octofiltered:after {
+  content: "\f00c";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  padding: 4px 6px;
+  line-height: normal;
+  font-size: 12px;
+}
+
+/*# sourceMappingURL=jquery-octofilter.css.map */

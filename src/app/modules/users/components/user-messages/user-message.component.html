@@ -1,0 +1,151 @@
+<div class="container-fluid" id="main-container">
+  <div class="row h-100">
+    <div class="col-12 col-sm-5 col-md-4 d-flex flex-column" id="chat-list-area" style="position:relative;">
+
+      <!-- Navbar -->
+      <div class="row d-flex flex-row align-items-center p-2" id="navbar">
+        <img alt="Profile Photo" class="img-fluid rounded-circle mr-2" style="height:50px; cursor:pointer;" (click)="showProfile=true" id="display-pic"  src="assets/person-icon.png">
+        <div class="text-white font-weight-bold" id="username">Anish</div>
+        <div class="nav-item dropdown ml-auto">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v text-white"></i></a>
+          <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(38px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+            <a class="dropdown-item" href="#">New Group</a>
+            <a class="dropdown-item" href="#">Archived</a>
+            <a class="dropdown-item" href="#">Starred</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="#">Log Out</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat List -->
+  <div class="row" id="chat-list" style="overflow:auto;">
+  <div *ngFor="let d of dialogueList" class="chat-list-item d-flex flex-row w-100 p-2 border-bottom "  (click)="onUserSelect(d)">
+    <img src="assets/person-icon.png" alt="Profile Photo" class="img-fluid rounded-circle mr-2" style="height:50px;">
+    <div class="w-50">
+      <div class="name">{{d.name}}</div>
+      <div class="small last-message">{{d.last_message}}</div>
+    </div>
+    <div class="flex-grow-1 text-right">
+      <div class="small time">{{d.last_message_date_sent | chatDateFormat}}</div>
+      <!-- <i  class="fa fa-check-square {{ (d.unread_messages_count > 0) ? 'read': 'unread' }}"></i> -->
+      <div *ngIf="d.unread_messages_count" class="badge badge-success badge-pill small d-none" id="unread-count">{{d?.unread_messages_count}}</div>
+    </div>
+  </div>
+  </div>
+<!-- Profile Settings -->
+  <div class="d-flex flex-column w-100 h-100" id="profile-settings" [ngStyle]="{'left': showProfile ? '0%' : '-110%'}" style="left: -110%;">
+      <div class="row d-flex flex-row align-items-center p-2 m-0" style="background:#009688; min-height:65px;">
+        <i class="fa fa-arrow-left p-2 mx-3 my-1 text-white" style="font-size: 1.5rem; cursor: pointer;" (click)="showProfile=false"></i>
+        <div class="text-white font-weight-bold">Profile</div>
+      </div>
+      <div class="d-flex flex-column" style="overflow:auto;">
+        <img alt="Profile Photo" class="img-fluid rounded-circle my-5 justify-self-center mx-auto" id="profile-pic" src="images/asdsd12f34ASd231.png">
+        <input type="file" id="profile-pic-input" class="d-none">
+        <div class="bg-white px-3 py-2">
+          <div class="text-muted mb-2"><label for="input-name">{{ userDetails?.user?.full_name }}</label></div>
+          <input type="text" name="name" id="input-name" class="w-100 border-0 py-2 profile-input">
+        </div>
+        <div class="text-muted p-3 small">
+          This is not your username or pin. This name will be visible to your WhatsApp contacts.
+        </div>
+        <div class="bg-white px-3 py-2">
+          <div class="text-muted mb-2"><label for="input-about">About</label></div>
+          <input type="text" name="name" id="input-about" value="" class="w-100 border-0 py-2 profile-input">
+        </div>
+      </div>
+      
+    </div>
+
+</div>
+
+
+
+
+  <!-- Message Area -->
+  <div class="d-none  message-area d-sm-flex flex-column col-12 col-sm-7 col-md-8 p-0 h-100" *ngIf="qbdialogue.currentDialogue" >
+    <div class="w-100 h-100 overlay d-none"></div>
+
+    <!-- Navbar -->
+    <div class="row d-flex flex-row align-items-center p-2 m-0 w-100" id="navbar">
+      <div class="d-block d-sm-none">
+        <i class="fa fa-arrow-left p-2 mr-2 text-white" style="font-size: 1.5rem; cursor: pointer;" onclick="showChatList()"></i>
+      </div>
+      <a href="javascript:;">
+          <!-- <figure class="avatar"> -->
+              <!-- <span class="avatar-title bg-secondary rounded-circle" style="height:50px;">G</span> -->
+          <!-- </figure> -->
+        <img  src="assets/person-icon.png" alt="Profile Photo" class="img-fluid rounded-circle mr-2" style="height:50px;" id="pic">
+        </a>
+      <div class="d-flex flex-column">
+        <div class="text-white font-weight-bold" id="name">{{currentDialog?.name}}</div>
+        <div class="text-white small" id="details">You, Nitin, Suvro Mobile</div>
+      </div>
+      <div class="d-flex flex-row align-items-center ml-auto">
+          <a href="javascript:;"  (click)="startCall()"> <i class="fa fa-video-camera mx-3 text-white d-none d-md-block"></i></a>
+        <!-- <a href="#"><i class="fa fa-search mx-3 text-white d-none d-md-block"></i></a>
+        <a href="#"><i class="fa fa-paperclip mx-3 text-white d-none d-md-block"></i></a>
+        <a href="#"><i class="fa fa-ellipsis-v mr-2 mx-sm-3 text-white"></i></a> -->
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="d-flex flex-column messages" id="messages">
+<div class="mx-auto my-2 bg-primary text-white small py-1 px-2 rounded">
+27/03/2018
+</div>
+<ng-container *ngFor="let item of chatData">
+<div [id]="item._id" class="p-1 my-1 mx-3 rounded bg-white shadow-sm message-item" [class.self]="item.sender_id == session.user_id" class="{{ (item.sender_id == session.user_id) ? 'align-self-end' : 'align-self-start'}}" >
+  <div class="options">
+    <a href="#"><i class="fa fa-angle-down text-muted px-2"></i></a>
+  </div>
+
+
+<!-- <div class="small font-weight-bold text-primary">
++91 98232 63547
+</div> -->
+
+<div class="d-flex flex-row">
+  <div class="body m-1 mr-2">  {{item.message}}</div>
+  <div class="time ml-auto small text-right flex-shrink-0 align-self-end text-muted" style="width:75px;">
+    <div *ngIf="item.attachments && item.attachments.length" class="message__attachments_wtap">
+      <img *ngFor="let attachment of item.attachments"  alt="attachment" class="message_attachment"
+           [src]="qbmessage.getFileUrl(attachment.id)">
+    </div>
+  {{item.date_sent | date : 'h:mm a'}}
+    <ng-container *ngIf="item.sender_id == session.user_id">
+      <i *ngIf="item.date_sent" class="fa fa-check"></i>
+      <i *ngIf="item.delivered_ids | filter : item.recipient_id" class="fa fa-check"></i>
+    </ng-container>
+  </div>
+</div>
+</div>
+</ng-container>
+
+<div class="mx-auto my-2 bg-primary text-white small py-1 px-2 rounded">
+28/03/2018
+</div>
+
+</div>
+
+<div class="justify-self-end align-items-center flex-row d-flex" id="input-area">
+<a href="#"><i class="fa fa-smile text-muted px-3" style="font-size:1.5rem;"></i></a>
+<input (keyup.enter)="onEnter(currentDialog, message)"  [(ngModel)]="message" type="text" name="message" id="input" placeholder="Type a message" class="flex-grow-1 border-0 px-3 py-2 my-3 rounded shadow-sm">
+<i class="fa fa-paper-plane text-muted px-3" style="cursor:pointer;" onclick="onEnter(currentDialog, message)"></i>
+</div>
+<div class="message__actions">
+<div class="attachments_preview j-attachments_preview">
+  <ng-container *ngFor="let data of attachments">
+    <div class="attachment_preview__wrap m-loading" id="{{data.id}}">
+      <img class="attachment_preview__item" src="{{data.src}}">
+    </div>
+  </ng-container>
+</div>
+<label class="attach_btn" for="attach_btn">
+  <i class="material-icons">attachment</i>
+  <input accept="image/*" class="attach_input" id="attach_btn" (change)="prepareToUpload($event)" name="attach_file" type="file"/>
+</label>
+<button class="send_btn">send</button>
+</div>
+</div>
+</div>

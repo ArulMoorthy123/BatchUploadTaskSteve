@@ -1,0 +1,23 @@
+<div class="row" [formGroup]="loginForm">
+      <div class="col-12">
+            <input formControlName="userName" (keypress)="handleKeyPress($event)" class="form-control" type="text" placeholder="Email" name="">
+            <span *ngIf="submitted && loginForm.get('userName')?.errors?.required" for="userName" class="error">
+                  User Name is required.
+            </span>
+      </div>
+      <div class="col-12">
+            <input class="form-control" (keypress)="handleKeyPress($event)" formControlName="password" type="password" [attr.type]="showPassword?'text':'password'"  placeholder="Password" name="">
+            <span *ngIf="submitted && loginForm.get('password')?.errors?.required" for="password" class="error">
+                  Password required.
+            </span>
+            <button class="btn" (click)="showPassword = !showPassword"><i class="far fa-eye"></i></button>
+      </div>
+      <div class="col-12 text-right">
+            <a [routerLink]="urlServices.USER_PAGE.FORGOT_PASSWORD_URL">Forgot Password ?</a>
+      </div>
+      <div class="col-12">
+            <button type="button" [disabled]="loading" (click)="submitForm()"
+                  class="registerbtn btn btn-lg btn-dark-green bold text-uppercase btn-circle w-100">Log
+                  In <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> </button>
+      </div>
+</div>

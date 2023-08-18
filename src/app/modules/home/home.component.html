@@ -1,0 +1,24 @@
+<section id="register_cont" class="container">
+      <div class="row">
+            <div class="col-md-5">
+
+                  <div class="slogan_slider owl-carousel owl-theme">
+                        <div class="item">
+                              <h4>Welcome to CareerJourney -- Your Career Mirror supported by professional, trusted connections to
+                                guide your Journey.</h4>
+                        </div>
+                        <div class="item">
+                              <h4>
+                                To live a successful life, one needs to manage Health, Financials, Relationships, and Career really well.
+                                 CareerJourney is your personal Career Coach and a Guide to help navigating your complex Career Journey.
+                              </h4>
+                        </div>
+                  </div>
+            </div>
+
+            <div class="col-md-7">
+                 <app-register *ngIf="!auth.loginStatus()"></app-register>
+
+            </div>
+      </div>
+</section>

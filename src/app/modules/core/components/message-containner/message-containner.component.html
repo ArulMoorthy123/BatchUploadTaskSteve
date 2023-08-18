@@ -1,0 +1,157 @@
+<div id="mesgs" [class.profile_infoAc]="chatProfileModal">
+
+  <!-- Message Area -->
+  <div class="tab-content" *ngIf="currentDialogueId">
+
+    <!-- Messages 2 start -->
+    <div class="tab-pane fade show active" role="tabpane2" aria-labelledby="message2-tab">
+      <div class="mesg_title" *ngIf="show_call_btn">
+        <span (click)="toggleChatProfileModal(chatProfileModal)"> {{currentDialogue?.name}}
+        </span>
+        <button *ngIf="currentDialogue.type !=3 && show_call_btn" type="button" style="float: right" (click)="addNewMember()"
+          class="btn btn-light">
+          <i class="fas fa-user-plus"></i></button>
+
+        <!-- <button *ngIf="currentDialogue.type ==3" type="button" style="float: right" (click)="call(true)" class="btn btn-light">
+          <i class="fas fa-phone"></i></button> -->
+
+        <button *ngIf="currentDialogue.type ==3" type="button" style="float: right" (click)="call(false)" class="btn btn-light">
+          <i class="fas fa-video"></i></button>
+      </div>
+
+      <div class="msg_history" #messagePanel scrollTopTracker (scrollingFinished)="loadMessage()">
+        <div class="d-flex justify-content-center" *ngIf="loader">
+          <div class="spinner-border text-secondary mb-5" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <ng-container *ngFor="let item of messageData">
+          <div #chatDiv>
+            <div [readReport]="item" *ngIf="!item.notification_type"
+              class="{{ (item.sender_id == self_qbid) ? 'outgoing_msg' : 'incoming_msg'}}">
+              <div class="mesg_details">
+                <div class="avater_ico">
+                  <img src="{{item.sender_id | chatProfileImage }}" alt="" />
+                </div>                
+                <span class="time_date">{{item.date_sent * 1000 | date : 'h:mm a'}}</span>
+              </div>
+              <span *ngIf="currentDialogue.type !=3"
+                  class="chatUserName">{{item.sender_id | chatProfileName | async}}</span>
+              <div *ngIf="item.attachments.length" class="msg_media">
+                <ng-container *ngFor="let attachment of item.attachments">
+                  <ng-container [ngSwitch]="(attachment.type | split)">
+                    <a href="javascript:;" *ngSwitchCase="'image'" data-toggle="modal" data-target="javascript:;"
+                      (click)="openModal(mediaImageTemplate,attachment.id)">
+                      <img alt="attachment" appLazyLoadImage [src]="attachment.id | chatFileUrl">
+                      <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only">Loading...</span>
+                  </div>
+                    </a>
+                    <video width="320" height="240" controls preload="none" *ngSwitchCase="'video'">
+                      <source [src]="attachment.id | chatFileUrl" [type]="attachment.type">
+                    </video>
+                    <audio controls width="200" height="100" preload="none" *ngSwitchCase="'audio'">
+                      <source [src]="attachment.id | chatFileUrl" [type]="attachment.type">
+                    </audio>
+                    <span *ngSwitchDefault> its an file</span>
+                  </ng-container>
+
+                  <a (click)="downloadImage(attachment.id,attachment.name)" href="javascript:;" class="btn btn-circle btn-sm btn-primary" ><i class="fas fa-download"></i></a>
+                </ng-container>
+                <span class="media_name" *ngIf="item.attachments && item.attachments.length" innerHTML={{item.attachments[0]?.name}}></span>
+              </div>
+              <div class="clearfix"></div>
+
+              <!-- <p>{{item.message}}</p> -->
+              <p *ngIf="item.attachments.length==0" class="messageText" innerHTML={{item.message}}></p>              
+              <div class="clearfix"></div>
+              <ng-container *ngIf="item.sender_id ==self_qbid" [ngSwitch]="(item | chatMessageStatus)">
+                <i *ngSwitchCase="'sent'" class="fa fa-check text-secondary"></i>
+                <i *ngSwitchCase="'delivered'" class="fa fa-check-double text-dark"></i>
+                <i *ngSwitchCase="'read'" class="fa fa-check-double text-primary"></i>
+                <i *ngSwitchCase="'loading'" class="fa fa-clock"></i>
+                <i *ngSwitchCase="'failed'" class="fa fa-exclamation-triangle"></i>
+
+              </ng-container>
+            </div>
+
+            <div *ngIf="item.notification_type" class="msg_notif"><span> {{ item | chatNotification | async}}</span>
+            </div>
+
+          </div>
+        </ng-container>
+
+
+        <!-- <div class="date_chat"><span>10 July, 2020</span></div> -->
+      </div>
+    </div>
+    <!-- Messages 2 end -->
+
+    <span *ngIf="uploadingStatus">uploading..</span>
+    <div class="type_msg" [formGroup]="messageForm">
+      <div class="type_msg_sub">
+        <div class="msg_media_prev" *ngIf="attachments.length">
+          <ng-container *ngFor="let data of attachments">
+            <!-- <div class="attachment_preview__wrap m-loading" id="{{data.id}}"> -->
+            <img src="{{data.src}}" class="msg_media">
+            <!-- </div> -->
+          </ng-container>
+        </div>
+        <textarea class="form-control" rows="2"
+          (keyup)="($event.keyCode == 13&&!$event.shiftKey) ? sendMessage() : null" formControlName="message"
+          placeholder="Type a message"></textarea>
+        <div class="attachment_btn">
+          <input accept="image/*,application/*,audio/*,video/*" type="file" name="attach_file" id="attach_btn"
+            (change)="prepareToUpload($event)"><i class="fas fa-paperclip"></i></div>
+        <!-- accept="application/pdf,application/msword,
+        application/vnd.openxmlformats-officedocument.wordprocessingml.document" -->
+        <button class="msg_send_btn" (click)="sendMessage()" type="button"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+    <!-- Messages History End -->
+  </div>
+
+  <app-chat-profile *ngIf="chatProfileModal" [dialogueId]="currentDialogueId"
+    (onCloseEvent)="toggleChatProfileModal($event)" (onClearDialogueEvent)="clearDialogue($event)"></app-chat-profile>
+
+  <div class="tab-content" *ngIf="!currentDialogueId && !messageData.length">
+
+  </div>
+
+
+
+</div>
+<!-- 
+    <div class="message__actions">
+      <div class="attachments_preview j-attachments_preview">
+        <ng-container *ngFor="let data of attachments">
+          <div class="attachment_preview__wrap m-loading" id="{{data.id}}">
+            <img class="attachment_preview__item" src="{{data.src}}">
+          </div>
+        </ng-container>
+      </div>
+      <label class="attach_btn" for="attach_btn">
+        <i class="material-icons">attachment</i>
+        <input accept="image/*" class="attach_input" id="attach_btn" (change)="prepareToUpload($event)"
+          name="attach_file" type="file" />
+      </label>
+    </div> 
+  -->
+
+<!-- image loader -->
+
+<!-- Chat media model  start -->
+<ng-template #mediaImageTemplate>
+  <div class="modal-content">
+    <div class="modal-body">
+      <button type="button" (click)="closeImgModal()" class="close" data-dismiss="modal"
+        aria-label="Close">&times;</button>
+      <img [src]="modal_image_url || ''" alt="" />
+    </div>
+  </div>
+</ng-template>
+<!-- Chat media model end -->
+
+
+<!-- attachments modal shows -->

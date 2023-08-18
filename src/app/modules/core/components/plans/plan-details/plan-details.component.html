@@ -1,0 +1,129 @@
+<div *ngIf="loading">
+  <div class="loader_content">
+    <div class="loading">
+      <p>Loading</p>
+      <span></span>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!loading" class="plan-details">
+  <div class="modal-content">
+    <form [formGroup]="planForm" (ngSubmit)="updatePlan($event)">
+      <div class="modal-header text-center light-greenBg">
+        <h5 class="modal-title semi_bold"><i
+            class="far fa-check-square"></i>{{!showError ? planForm?.value?.title : 'Error!'}}</h5>
+        <button type="button" (click)="closeModal()" class="close" data-dismiss="modal"
+          aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="showError" class="d-flex justify-content-center m-5">
+          <span class="alert alert-danger" role="alert">
+            {{messages.COMMON_ERROR}}
+          </span>
+        </div>
+        <ng-container *ngIf="!showError">
+          <div *ngIf="alert.show" class="messages">
+            <div class="form-group alert alert-dismissible fade show" [ngClass]="alert.type" role="alert">
+              <button type="button" class="close" (click)="showAlert()" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {{alert.message}}
+            </div>
+          </div>
+          <div class="row plan-sec">
+            <div class="form-group col-md-4 status">
+              <label>Plan Status <sup class="text-danger">*</sup></label>
+              <select *ngIf="isEditable" class="form-control" formControlName="status">
+                <option *ngFor="let status of statusOption" [ngValue]="status">{{ status }}</option>
+              </select>
+              <div *ngIf="!isEditable" class="form-control">{{planForm?.value?.status}}</div>
+            </div>
+            <div class="form-group col-md-4 assigned">
+              <label>Assigned to <sup class="text-danger">*</sup></label>
+                <ng-multiselect-dropdown *ngIf="isEditable && isOwner" formControlName="assigned_to" [settings]="ddSettings" [data]="connectionList">
+                </ng-multiselect-dropdown>
+              <div *ngIf="!isOwner" class="form-control">{{planForm?.value?.assigned_to[0]?.name}}</div>
+            </div>
+            <div class="form-group col-md-4 dueDate">
+              <label>Due Date <sup class="text-danger">*</sup></label>
+              <input *ngIf="isEditable" class="form-control" placeholder="mm-dd-yyyy" formControlName="dueDate"
+                bsDatepicker [minDate]="minDate">
+              <span *ngIf="planForm.get('dueDate')?.errors?.required && submitted" for="dueDate" class="error">
+                Due Date is required.
+              </span>
+              <div *ngIf="!isEditable" class="form-control">{{planForm?.value?.dueDate | date: 'shortDate'}}</div>
+            </div>
+          </div>
+          <div class="row pt-4 plan-sec">
+            <div class="form-group col-md-6 shared-doc">
+              <label>Shared Document Link</label>
+              <span class="label-info pl-2">(eg. MS SharePoint / Google Document)</span>
+              <a *ngIf="planForm?.value?.sharedDoc_link" class="external-link pl-3 link btn-link"
+                [href]="planForm?.value?.sharedDoc_link" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+              <input *ngIf="isEditable" type="text" [pattern]="REG_EX.URL" class="form-control"
+                formControlName="sharedDoc_link">
+              <span *ngIf="planForm.get('sharedDoc_link')?.errors?.pattern" for="tags" class="error">
+                Should be a valid link!
+              </span>
+              <div *ngIf="!isEditable" class="read-only wrap-text text-m rounded">{{planForm?.value?.sharedDoc_link}}
+              </div>
+            </div>
+
+            <div class="form-group col-md-2 modified">
+              <label>Last Modified</label>
+              <div class="form-control">{{planForm?.value?.modified_on | date: 'short'}}</div>
+            </div>
+            <div class="form-group col-md-2 owner">
+              <label>Created by</label>
+              <div class="form-control">{{planForm?.value?.created_by?.name}}</div>
+            </div>
+            <div class="form-group col-md-2 owner">
+              <label>Created On</label>
+              <div class="form-control">{{planForm?.value?.created_on | date: 'short'}}</div>
+            </div>
+          </div>
+          <!-- Descriptions -->
+          <h5 class="card-title pt-2">Description</h5>
+          <div class="row plan-sec">
+            <div class="form-group col-md-12">
+              <div class="read-only wrap-text text-m rounded p-3 plan-desc" [innerHTML]="planForm?.value?.desc"></div>
+            </div>
+          </div>
+          <!-- Comments -->
+          <ng-container *ngIf="planForm?.value?.comments.length || isEditable">
+            <h5 class="card-title pt-2">Comments</h5>
+            <ng-container *ngIf="planForm?.value?.comments.length">
+              <div class="plan-sec rounded plan-comments mb-3 p-2">
+                <div class="comment mb-2" *ngFor="let comment of planForm?.value?.comments">
+                  <span class="comment-by font-italic">{{comment?.commentcreated_by?.name}},
+                    {{comment?.created_on | date: 'short'}}</span>
+                  <div class="comment-desc wrap-text text-m pb-2" [innerHTML]="comment?.comment"></div>
+                </div>
+              </div>
+            </ng-container>
+            <div *ngIf="isEditable" class="row">
+              <div class="form-group col-md-12 add-comment">
+                <label>Add Comments</label>
+                <textarea class="form-control" [(ngModel)]="defaultComment" placeholder="Add Comments..."
+                  formControlName="comment" rows="4"></textarea>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button [ng-disabled]="!btnDisabled" type="button" (click)="closeModal()"
+          class="btn btn-outline-secondary cancel">
+          Cancel</button>
+        <ng-container *ngIf="isEditable">
+          <button [ng-disabled]="!btnDisabled" type="submit" class="ml-3 btn btn-primary update">Update Plan</button>
+        </ng-container>
+      </div>
+
+    </form>
+  </div>
+</div>

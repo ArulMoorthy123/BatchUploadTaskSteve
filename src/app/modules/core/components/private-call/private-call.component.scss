@@ -1,0 +1,151 @@
+.private-call {
+  height: 84vh;
+
+  .light-bg {
+    background: #f7f8f7;
+  }
+
+  .conf-duration {
+    padding-top: 5px;
+    font-size: small;
+    color: grey;
+  }
+
+  .conference {
+    display: flex;
+    max-height: 71vh;
+
+    .conf- {
+      &pane {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-grow: 1;
+      }
+
+      &container {
+        position: relative;
+        margin: 0 3px;
+
+        .conf- {
+          &video {
+            width: 100%;
+            display: block;
+          }
+
+          &img {
+            width: 100%;
+          }
+
+          &audio {
+            border-radius: 50%;
+            width: 150px;
+            overflow: hidden;
+            box-shadow: 0 0 0 0.2rem rgba(58, 176, 195, 0.5);
+          }
+        }
+      }
+
+      &message {
+        width: 30vw;
+        align-items: flex-start;
+        margin: 0 0 0 10px;
+        border-left: 1px solid grey;
+      }
+    }
+
+  }
+
+  .modal- {
+    &footer {
+      justify-content: center;
+
+      button {
+        padding-left: 10px;
+
+        i {
+          padding: 0 5px;
+        }
+      }
+    }
+
+    &body {
+      padding: 0;
+      height: 75vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+
+  .call-controls-inner {
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    .controls {
+      margin-right: 25px;
+      padding: 12px !important;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px #ccc !important;
+      border-color: transparent;
+      -webkit-transition: 0.1s ease-in-out !important;
+      transition: 0.1s ease-in-out !important;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 0 2px #139ff0 !important;
+    }
+
+    .active {
+      background-color: #d93025;
+      border: 1px solid #d93025;
+      color: #fff;
+    }
+  }
+
+  .btn-plain {
+    background: -webkit-linear-gradient(top, transparent 0, transparent 100%);
+    background: linear-gradient(to bottom, transparent 0, transparent 100%);
+    border: 1px solid #75787d;
+    color: #4d525b;
+    font-weight: 700;
+    text-shadow: 0 -1px transparent;
+  }
+}
+
+:host {
+  ::ng-deep {
+    .message-container {
+      width: 100%;
+
+      .tab-content {
+        min-height: 100% !important;
+        .mesg_title {
+          display: none;
+        }
+
+        .type_msg {
+          margin-left: 5px;
+          position: fixed;
+          width: 30%;
+          bottom: 12%;
+
+          .msg_send_btn {
+            height: 35px;
+            right: 25px;
+            top: 25px;
+            width: 35px;
+          }
+        }
+
+        .msg_history {
+          height: 60.5vh;
+          padding: 20px 10px;
+        }
+      }
+    }
+  }
+}

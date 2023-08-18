@@ -1,0 +1,25 @@
+<form [formGroup]="skillDetailForm">
+  <ng-multiselect-dropdown [placeholder]="'Select Skills'" [settings]="dropdownSettings" [data]="skills"
+    formControlName="skill" [disabled]="disabled" (onSelect)="onItemSelect($event)"
+    (onFilterChange)="onFilterChange($event)">
+  </ng-multiselect-dropdown>
+  <div class="form_bottom">
+    <button type="submit" (click)="submitForm()" class="btn  btn-dark-green text-uppercase">Submit
+    </button>
+  </div>
+</form>
+
+<div *ngIf="_userProfileData?.skill?.length" class="card skill">
+  <div class="card-header">
+    <h5 class="card-title">Skills</h5>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-12 my_skills">
+        <span *ngFor="let skill of _userProfileData?.skill">
+          {{skill?.name}}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

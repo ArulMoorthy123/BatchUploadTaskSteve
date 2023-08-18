@@ -1,0 +1,36 @@
+<!-- <div class="scroll-pane panel-list" *ngIf="dialogueList.length"> -->
+<ng-container *ngIf="dialogueList.length">
+      <li class="nav-item" *ngFor="let contact of dialogueList">
+            <a href="javascript:;" (click)="showChat(contact)" class="nav-link "
+                  [class.active]="contact._id==selectedDialogueId" data-toggle="tab" role="tab" aria-selected="true">
+                  <div class="avater_ico">
+                        <img src="{{ getProfileUrl(contact) }}">
+                        <span class=" unread-count"
+                              *ngIf="contact.unread_messages_count">{{contact.unread_messages_count}}</span>
+                  </div>
+                  <div class="chat_ib">
+                        <h5>{{contact.name}} <span class="user_status active"></span></h5>
+                        <p>{{contact.last_message}}</p>
+                        <!-- <span class="chat_date">2 min ago</span> -->
+                        <!-- <button type="button" class="delete_cht" title="Delete Chat"><i
+                                                          class="fa fa-trash"></i></button> -->
+                  </div>
+            </a>
+      </li>
+</ng-container>
+<h3 ><i class="fas fa-address-book"></i> In Contacts</h3>
+<ng-container *ngIf="contactList.length">
+      <li class="nav-item" *ngFor="let contact of contactList">
+            <a href="javascript:;" (click)="createChat(contact)" class="nav-link "
+                  [class.active]="contact._id==selectedDialogueId" data-toggle="tab" role="tab" aria-selected="true">
+                  <div class="avater_ico">
+                        <img src="{{ getProfileUrl(false,contact.profileImageUrl) || profileImg}}">
+                  </div>
+                  <div class="chat_ib">
+                        <h5>{{contact.firstName}} {{contact.lastName}} <span class="user_status active"></span></h5>
+                        <p>{{contact.email}}</p>
+
+                  </div>
+            </a>
+      </li>
+</ng-container>

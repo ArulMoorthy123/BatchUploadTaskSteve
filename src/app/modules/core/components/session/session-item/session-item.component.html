@@ -1,0 +1,59 @@
+<accordion-group [isDisabled]="sessionGroup !== ACTIVE" [isOpen]="sessionDetail?.status === status.STARTED"
+  class="session-item" (click)="getSessionData()"
+  [ngClass]="sessionGroup == ACTIVE ? sessionDetail?.status?.toLowerCase() : sessionGroup.toLowerCase()">
+  <div accordion-heading>
+    <h5 class="card-title"><i *ngIf="sessionGroup === ACTIVE"
+        class="fas fa-chevron-down mr-2"></i>{{sessionDetail?.title}}</h5>
+    <div class="my-2 d-flex justify-content-between">
+      <div class="owner p-2 mr-3 rounded bg-light">
+        Created By: <strong>{{sessionDetail?.created_by?.name}}</strong>
+      </div>
+      <div class="show-time p-2 rounded bg-light">
+        Session Time: <strong>{{getTimeDiff()}}</strong>
+      </div>
+    </div>
+  </div>
+  <div class="session-info">
+    <div class="row details">
+      <div class="col-9">
+        <h6 class="card-title">Description</h6>
+        <div class="desc text-m wrap-text bg-light p-2 rounded" [innerHTML]="sessionDetail?.desc"></div>
+      </div>
+      <div class="col-3">
+        <h6 class="card-title d-flex justify-content-center">
+          <i class="fa fa-users mr-2 text-info"></i>
+          People Invited
+        </h6>
+        <ng-container *ngIf="!fullDetails">
+          <div class="d-flex justify-content-center">
+            <i class="fa fa-spin fa-2x fa-spinner text-info"></i>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="fullDetails">
+          <ul class="list-group">
+            <li *ngFor="let each of fullDetails.members" class="list-group-item text-capitalize">{{ each?.name }}</li>
+          </ul>
+        </ng-container>
+      </div>
+    </div>
+    <div *ngIf="sessionGroup === ACTIVE" class="session-action pt-3 mt-3 text-center">
+      <button [disabled]="callDisabled" class="join btn mr-3"
+        [ngClass]="callDisabled ? 'btn-outline-secondary': 'btn-success'" (click)="makeACall()"> {{callText}}
+      </button>
+      <button *ngIf="isOwner" class="edit mr-3 btn btn-outline-primary" (click)="editSession()"> <i
+          class="far fa-edit"></i> Edit Session
+      </button>
+      <button *ngIf="isOwner" class="delete btn btn-outline-danger" [disabled]="onDeleteLoader"
+        (click)="deleteSession()"><i *ngIf="onDeleteLoader" class="fa fa-spinner fa-spin"></i> <i
+          class="far fa-trash-alt"></i> Delete Session</button>
+    </div>
+  </div>
+</accordion-group>
+
+<ng-template #sessionLoadingTemplate>
+  <div class="modal-content">
+    <div class="modal-header text-center">
+      <h4>Initializing, Please wait!</h4>
+    </div>
+  </div>
+</ng-template>

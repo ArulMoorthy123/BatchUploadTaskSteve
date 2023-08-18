@@ -1,0 +1,100 @@
+<!-- Experience Details -->
+      <div class="col-md-12">
+            <div class="exp_detail" *ngFor="let data of _userProfileData?.occupation">
+              <div class="exp_title">
+                <i class="fas fa-briefcase"></i> {{data?.occupationName}} <span class="text-muted" *ngIf="data?.occupationStatus !=null">{{data?.occupationStatus}}</span>
+              </div>
+              <div class="exp_designation">
+                <i class="fas fa-question-circle"></i> {{data?.designation}}
+              </div>
+              <div class="clearfix" style="background-color: rgba(0,0,0,0.03);"></div>
+              <div class="compamy_name">
+                <i class="fas fa-laptop-house"></i> {{data?.employerName}}
+              </div>
+              <div class="exp_time">
+                <i class="fas fa-calendar-alt"></i>
+                   {{data?.startdate}}
+                   to
+                   <span *ngIf="data?.tillDate"> Till Date </span>
+                   <span *ngIf="!(data?.tillDate)"> {{data?.endDate}} </span>
+              </div>
+              <button class="btn fas fa-pencil-alt" (click)="updateData(data)"></button>
+            </div>
+
+            <fieldset [formGroup]="experienceDetailsForm">
+              <legend>Add Current/Most Recent Experience Details</legend>
+                <div class="form-group">
+                    <label>Occupation<sup class="text-danger">*</sup></label>
+                    <input class="form-control" type="text"  formControlName="occupationName" placeholder="Enter Occupation" >
+                    <span *ngIf="submitted && experienceDetailsForm.get('occupationName')?.errors?.required" for="occupationName"
+                    class="error">
+                    Occupation is required.
+                  </span>
+                    <input type="hidden" formControlName="occupationId"/>
+                  </div>
+                <div class="form-group">
+                  <label>Status</label>
+                  <input class="form-control" type="text" formControlName="occupationStatus"  placeholder="Enter Status">
+                </div>
+                <div class="form-group">
+                    <label>Company Name<sup class="text-danger">*</sup></label>
+                    <input class="form-control" type="text" formControlName="employerName" placeholder="Enter Company Name">
+                    <span *ngIf="submitted && experienceDetailsForm.get('employerName')?.errors?.required" for="employerName"
+                    class="error">
+                    Company name is required.
+                  </span>
+                  </div>
+                <div class="form-group">
+                  <label>Designation</label>
+                  <input class="form-control" type="text" formControlName="designation" placeholder="Enter Designation">
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group mb5">
+                          <label>Start Date(MM-DD-YYYY)<sup class="text-danger">*</sup></label>
+                          <input
+                            class="form-control"
+                            type="text"
+                            formControlName="startdate"
+                            placeholder="mm-dd-yyyy"
+                            bsDatepicker
+                            [maxDate]="maxDate"
+                            onkeydown="return false"
+                            >
+                            <span *ngIf="submitted && experienceDetailsForm.get('startdate')?.errors?.required" for="startdate"
+                            class="error">
+                            Start Date is required.
+                          </span>
+                      </div>
+                  </div>
+                  <div class="col-md-6" *ngIf="!hideEndDate">
+                      <div class="form-group mb5">
+                        <label>End Date(MM-DD-YYYY)</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="endDate"
+                          placeholder="mm-dd-yyyy"
+                          bsDatepicker
+                          [minDate]="minDate"
+                          onkeydown="return false"
+                        >
+                      </div>
+
+                    </div>
+                </div>
+                <div class="form-check mb20">
+                  <input type="checkbox" class="form-check-input" id="workHere" formControlName="tillDate">
+                  <label class="form-check-label" style="font-weight:400;" for="workHere">Currently Work here</label>
+                </div>
+            </fieldset>
+
+            <div class="form_bottom">
+              <button type="submit" [disabled]="loading" (click)="submitForm()"
+               class="btn  btn-dark-green text-uppercase">Submit
+               <i *ngIf="loading" class="fas fa-spinner fa-spin"></i></button>
+             </div>
+
+      </div>
+
+

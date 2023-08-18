@@ -1,0 +1,52 @@
+.session-item {
+  border-left: 3px solid #f8f9fa;
+  &.will_start {
+    border-color: #ffc107;
+  }
+  &.started {
+    border-color: #28a745;
+  }
+  &.finished {
+    border-color: #dc3545;
+  }
+  &.canceled {
+    border-color: #ccc;
+  }
+  &.archive {
+    border-color: #bebebe;
+  }
+  &-footer {
+    border-top: 1px solid #fcfcfc;
+  }
+  .text {
+    &-m {
+      font-size: medium;
+    }
+    &-center {
+      text-align: center;
+    }
+  }
+  .wrap-text {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  .desc{
+    border: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  .session-action {
+    border-top: 1px solid #f5f5f5;
+  }
+}
+
+:host {
+  ::ng-deep {
+    .session-item {
+      &.canceled,
+      &.archive {
+        .panel-heading.card-header {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+}

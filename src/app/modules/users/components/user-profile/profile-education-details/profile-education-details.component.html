@@ -1,0 +1,90 @@
+  <div class="col-md-12">
+    <div class="education_detail" *ngFor="let data of _userProfileData?.education">
+      <div class="education_title">
+        <i class="fas fa-graduation-cap"></i> {{data.qualificationType}}
+      </div>
+      <div class="education_school">
+        <i class="fas fa-university"></i> {{data.institution}} <br />
+      </div>
+      <div class="clearfix"></div>
+      <div class="education_time">
+        <i class="fas fa-calendar-alt"></i> {{data.startDate}} to {{data.endDate}}
+      </div>
+      <button class="btn fas fa-pencil-alt" (click)="updateData(data)"></button>
+    </div>
+    <fieldset [formGroup]="educationDetailsForm">
+        <legend>Add Education Details</legend>
+        <div class="form-group">
+          <label>Qualification<sup class="text-danger">*</sup></label>
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Enter Qualification"
+              formControlName="qualificationType"
+            />
+            <span *ngIf="submitted && educationDetailsForm.get('qualificationType')?.errors?.required" for="qualificationType"
+              class="error">
+              Qualification is required.
+             </span>
+             <input type="hidden" formControlName="educationId"/>
+        </div>
+        <div class="form-group">
+          <label>Institute<sup class="text-danger">*</sup></label>
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Enter Institute"
+            formControlName="institution"
+          />
+          <span *ngIf="submitted && educationDetailsForm.get('institution')?.errors?.required" for="institution"
+              class="error">
+              Institution is required.
+             </span>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Start Date(MM-DD-YYYY)<sup class="text-danger">*</sup></label>
+              <input
+                class="form-control"
+                type="text"
+                placeholder="mm-dd-yyyy"
+                formControlName="startDate"
+                bsDatepicker
+                [maxDate]="maxDate"
+                onkeydown="return false"
+              />
+              <span *ngIf="submitted && educationDetailsForm.get('startDate')?.errors?.required" for="startDate"
+              class="error">
+                Start Date is required.
+             </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>End Date(MM-DD-YYYY)<sup class="text-danger">*</sup></label>
+              <input
+                class="form-control"
+                type="text"
+                placeholder="mm-dd-yyyy"
+                formControlName="endDate"
+                bsDatepicker
+                [minDate]="minDate"
+                onkeydown="return false"
+              />
+              <span *ngIf="submitted && educationDetailsForm.get('endDate')?.errors?.required" for="endDate"
+              class="error">
+              End Date is required.
+             </span>
+            </div>
+          </div>
+        </div>
+
+      </fieldset>
+      <div class="form_bottom">
+        <button type="submit" [disabled]="loading" (click)="submitForm()"
+         class="btn  btn-dark-green text-uppercase">Submit
+         <i *ngIf="loading" class="fas fa-spinner fa-spin"></i></button>
+       </div>
+
+  </div>

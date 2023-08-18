@@ -1,0 +1,117 @@
+ <!-- Contact Details -->
+ <div  [formGroup]="contactDetailsForm">
+     <div class="row">
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>Email Id<sup class="text-danger">*</sup></label>
+              <input class="form-control" readonly formControlName="emailId" type="text" placeholder="Enter Email Id">
+              <span *ngIf="submitted && contactDetailsForm.get('emailId')?.errors?.required" for="emailId"
+                        class="error">
+                        Email Id Name is required.
+              </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+           <div class="form-group">
+            <label>Mobile No.<sup class="text-danger"></sup></label>
+            <input class="form-control" maxlength="10" formControlName="mobileNumber" type="text" placeholder="Enter Mobile No.">
+            <span *ngIf="submitted && contactDetailsForm.get('mobileNumber')?.errors?.required" for="mobileNumber"
+                      class="error">
+                      Mobile Number is required.
+            </span>
+            </div>
+        </div>
+     </div>
+     <!---
+     <div class="row">
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>Mobile No.<sup class="text-danger"></sup></label>
+              <input class="form-control" maxlength="10" formControlName="mobileNumber" type="text" placeholder="Enter Mobile No.">
+              <span *ngIf="submitted && contactDetailsForm.get('mobileNumber')?.errors?.required" for="mobileNumber"
+                        class="error">
+                        Mobile Number is required.
+              </span>
+            <span *ngIf="contactDetailsForm.get('mobileNumber')?.errors?.pattern" for="mobileNumber"
+              class="error">
+                        Mobile Number should be valid.
+              </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+           <div class="form-group">
+
+            </div>
+        </div>
+     </div> -->
+     <div class="row">
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>PIN code/ZIP code<sup class="text-danger">*</sup></label>
+              <input class="form-control" type="text" formControlName="zipCode" placeholder="Enter PIN code/ZIP code">
+              <span *ngIf="submitted && contactDetailsForm.get('zipCode')?.errors?.required" for="zipCode"
+              class="error">
+                            ZIP code is required.
+              </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>City<sup class="text-danger">*</sup></label>
+              <input class="form-control" type="text" formControlName="city" placeholder="Enter City">
+              <span *ngIf="submitted && contactDetailsForm.get('city')?.errors?.required" for="city"
+              class="error">
+                City is required.
+              </span>
+           </div>
+        </div>
+     </div>
+     <div class="row">
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>Country<sup class="text-danger">*</sup></label>
+              <select class="form-control" formControlName="country">
+                 <option value="">Select</option>
+                 <option value="India">India</option>
+                 <option value="USA">USA</option>
+                 <option value="Canada">Canada</option>
+              </select>
+              <span *ngIf="submitted && contactDetailsForm.get('country')?.errors?.required" for="country"
+              class="error">
+                            Country is required.
+              </span>
+           </div>
+        </div>
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>State<sup class="text-danger">*</sup></label>
+              <input class="form-control" type="text" placeholder="Enter State" formControlName="state">
+              <span *ngIf="submitted && contactDetailsForm.get('state')?.errors?.required" for="state"
+              class="error">
+                            State is required.
+              </span>
+           </div>
+        </div>
+     </div>
+     <div class="row">
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>Address Line 1</label>
+              <textarea class="form-control" type="text" formControlName="addressLine1" placeholder="Enter Address Line 1"></textarea>
+           </div>
+        </div>
+        <div class="col-md-6">
+           <div class="form-group">
+              <label>Address Line 2</label>
+              <textarea class="form-control" type="text" formControlName="addressLine2" placeholder="Enter Address Line 2"></textarea>
+           </div>
+        </div>
+     </div>
+     <div class="form_bottom">
+        <button type="submit" [disabled]="loading" (click)="submitForm()"
+         class="btn  btn-dark-green text-uppercase">Submit
+         <i *ngIf="loading" class="fas fa-spinner fa-spin"></i></button>
+     </div>
+  </div>
+
+

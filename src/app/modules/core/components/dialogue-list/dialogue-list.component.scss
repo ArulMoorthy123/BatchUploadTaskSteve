@@ -1,0 +1,62 @@
+.panel-list {
+  height: 80vh;
+
+  .active {
+    background: #66b167;
+  }
+  .contact-list {
+    align-items: center;
+    display: flex;
+    padding: 5px;
+    border: 1px solid #ececec;
+    margin-bottom: 3px;
+    cursor: pointer;
+    .avatar {
+      max-width: 60px;
+      padding: 0 5px;
+      img {
+        border-radius: 50%;
+        height: 49px;
+        width: 49px;
+      }
+    }
+    .contact-name {
+      font-size: medium;
+      padding: 0 5px;
+      word-break: break-all;
+    }
+    .last-message {
+      font-size: small;
+      padding: 0 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ts {
+      margin-left: auto;
+    }
+  }
+  .online {
+    border-left: 5px solid #28a745;
+  }
+  .offline {
+    border-left: 5px solid #ccc;
+  }
+  .unread-count {
+    min-width: 20px;
+    font-weight: 500;
+    text-align: center;
+    background-color: #28a745;
+    border-radius: 50%;
+    color: #fff;
+  }
+}
+
+.selected-list {
+  background: #ccc;
+}
+
+.scroll-pane {
+  height: 66vh;
+  overflow: auto;
+}

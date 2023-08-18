@@ -1,0 +1,15 @@
+<ng-container *ngIf="contactList.length">
+      <li class="nav-item" *ngFor="let contact of contactList">
+            <a href="javascript:;" (click)="showChat(contact)" class="nav-link "
+                  [class.active]="contact._id==selectedDialogueId" data-toggle="tab" role="tab" aria-selected="true">
+                  <div class="avater_ico">
+                        <img src="{{ getProfileUrl(contact.profileImageUrl) || profileImg}}">
+                  </div>
+                  <div class="chat_ib">
+                        <h5>{{contact.firstName}} {{contact.lastName}} <span class="user_status active"></span></h5>
+                        <p>{{contact.email}}</p>
+
+                  </div>
+            </a>
+      </li>
+</ng-container>

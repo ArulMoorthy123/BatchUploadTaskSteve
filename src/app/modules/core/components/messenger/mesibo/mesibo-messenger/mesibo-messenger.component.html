@@ -1,0 +1,71 @@
+<div id="mesgs">
+
+      <!-- Message Area -->
+      <div class="tab-content" *ngIf="currentGroupId && chatOpenStatus">
+
+            <!-- Messages 2 start -->
+            <div class="tab-pane fade show active" role="tabpane2" aria-labelledby="message2-tab">
+                  <div class="mesg_title"></div>
+
+                  <div class="msg_history" #messagePanel scrollTopTracker (scrollingFinished)="loadMessage()">
+                        <div class="d-flex justify-content-center" *ngIf="loader">
+                              <div class="spinner-border text-secondary mb-5" role="status">
+                                    <span class="sr-only">Loading...</span>
+                              </div>
+                        </div>
+                        <ng-container *ngFor="let item of messageData">
+                              <div #chatDiv>
+                                    <div  class="{{ (item.peer == self_address) ? 'outgoing_msg' : 'incoming_msg'}}">
+                                          <div class="mesg_details">
+                                                <div class="avater_ico">
+                                                      <img src="{{item.peer | chatProfileImage }}" alt="" />
+                                                </div>
+                                                <span class="time_date">{{item.ts | date : 'h:mm
+                                                      a'}}</span>
+                                          </div>
+                                          <!-- <span *ngIf="currentDialogue.type !=3" class="chatUserName">{{item.sender_id |
+                                                chatProfileName | async}}</span> -->
+
+                                          <div class="clearfix"></div>
+
+                                          <!-- <p>{{item.message}}</p> -->
+                                          <p class="messageText" innerHTML={{item.message}}></p>
+                                          <div class="clearfix"></div>
+                                          <!-- <ng-container *ngIf="item.sender_id ==self_qbid"
+                                                [ngSwitch]="(item | chatMessageStatus)">
+                                                <i *ngSwitchCase="'sent'" class="fa fa-check text-secondary"></i>
+                                                <i *ngSwitchCase="'delivered'" class="fa fa-check-double text-dark"></i>
+                                                <i *ngSwitchCase="'read'" class="fa fa-check-double text-primary"></i>
+                                                <i *ngSwitchCase="'loading'" class="fa fa-clock"></i>
+                                                <i *ngSwitchCase="'failed'" class="fa fa-exclamation-triangle"></i>
+
+                                          </ng-container> -->
+                                    </div>
+
+                                    <!-- <div *ngIf="item.notification_type" class="msg_notif"><span> {{ item |
+                                                chatNotification | async}}</span> -->
+                              <!-- </div> -->
+
+                  </div>
+                  </ng-container>
+
+
+                  <!-- <div class="date_chat"><span>10 July, 2020</span></div> -->
+            </div>
+      </div>
+      <!-- Messages 2 end -->
+      <div class="type_msg" [formGroup]="messageForm">
+            <div class="type_msg_sub">
+                  <textarea class="form-control" rows="2"
+                        (keyup)="($event.keyCode == 13&&!$event.shiftKey) ? sendMessage() : null"
+                        formControlName="message" placeholder="Type a message..."></textarea>
+                  <button class="msg_send_btn" (click)="sendMessage()" type="button"><i
+                              class="fas fa-paper-plane"></i></button>
+            </div>
+      </div>
+
+      <!-- Messages History End -->
+</div>
+<div class="tab-content" *ngIf="!currentGroupId && !messageData.length">
+</div>
+</div>

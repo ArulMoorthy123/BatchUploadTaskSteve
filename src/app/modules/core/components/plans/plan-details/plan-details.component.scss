@@ -1,0 +1,34 @@
+.plan-details {
+  label {
+    font-size: small;
+    text-transform: uppercase;
+    color: #808080;
+  }
+  .wrap-text {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  .text-m {
+    font-size: medium;
+  }
+  .read-only {
+    color: #495057;
+    background: #f9f9f9;
+  }
+  .plan {
+    &-sec {
+      border-bottom: 1px solid #ebebeb;
+    }
+    &-comments {
+      background: #f9f9f9;
+      border: 1px solid #ebebeb;
+      .comment {
+        border-bottom: 1px solid #ebebeb;
+      }
+      .comment-by {
+        font-size: small;
+        color: #808080;
+      }
+    }
+  }
+}

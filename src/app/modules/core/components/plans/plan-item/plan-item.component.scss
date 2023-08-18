@@ -1,0 +1,48 @@
+.plan-item {
+  border: 1px solid #ccc;
+  cursor: pointer;
+  .action{
+    .delete{
+      color: #ccc;
+      &:hover {
+        color: #dc3545;
+      }
+    }
+  }
+  &:hover {
+    background: #f7fdff;
+    border-color: #ccc;
+  }
+  .field-status{
+    border:1px solid #dc3545;
+  }
+  &.DONE {
+    border-left: 3px solid #dc3545;
+    .field-status{
+      border:1px solid #dc3545;
+    }
+  }
+  &.IN_PROGRESS {
+    border-left: 3px solid #28a745;
+    .field-status{
+      border:1px solid #28a745;
+    }
+  }
+  &.OPEN {
+    border-left: 3px solid #ffc107;
+    .field-status{
+      border:1px solid #ffc107;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 576px) {
+  .plan-item {
+    .plan-info{
+      &>div{
+        margin: 10px;
+      }
+    }
+  }
+}

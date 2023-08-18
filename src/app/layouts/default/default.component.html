@@ -1,0 +1,11 @@
+
+<section id="wrapper" [ngClass]="{'loggedin': auth.loginStatus()==true}">
+<app-header></app-header>
+<div class="cj-content">
+    <router-outlet></router-outlet>
+    <div class="push"></div>
+</div>
+<app-footer></app-footer>
+</section>
+<app-messenger *ngIf="auth.loginStatus()"></app-messenger>
+<cj-conference-room *ngIf="auth.loginStatus()"></cj-conference-room>

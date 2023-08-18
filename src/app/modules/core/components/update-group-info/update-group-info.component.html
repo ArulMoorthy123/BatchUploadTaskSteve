@@ -1,0 +1,43 @@
+<div class="modal-content">
+      <div class="modal-header text-center light-greenBg">
+            <h5 class="modal-title semi_bold"><i class="far fa-edit"></i> Update Group Info</h5>
+            <button type="button" (click)="closeModal()" class="close" data-dismiss="modal"
+                  aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" [formGroup]="groupForm">
+            <div class="grp_profile_photo mb20">
+                  <img [src]="groupImageUrl || 'assets/images/avatar2.png'" alt="" />
+                  <div class="grp_img_btn">
+                        <input type="file" formControlName="profileImage" (change)="onChangeFile($event)"
+                              name="profileImage">
+                        <i class="fas fa-camera"></i>
+                        <div class="clearfix"></div>
+                        Change group icon
+                  </div>
+            </div>
+            <div class="form-group">
+                  <label>Group Name</label>
+                  <input class="form-control" formControlName="groupName" type="text" placeholder="Enter Group Name">
+                  <span *ngIf="groupForm.get('groupName')?.errors?.required" for="groupName" class="error">
+                        Group Name is Required
+                  </span>
+            </div>
+            <div class="form-group">
+                  <label>Group Description</label>
+                  <textarea class="form-control" placeholder="Group Description" formControlName="description" rows="3"
+                        cols="50">
+                  </textarea>
+                  <span
+                        class="pull-right label label-default">{{groupForm.get('description')?.value?.length || 0}}/140</span>
+                  <span *ngIf="groupForm.get('description')?.errors?.maxLength" for="description" class="error">
+                        Description Max 140 character are allowed
+                  </span>
+            </div>
+      </div>
+      <div class="modal-footer text-right">
+            <button [disabled]="loading" (click)="updateGroupInfo()" class="btn btn-success" name="button">
+                  <i class="fas fa-check"></i>
+                  <i *ngIf="loading" class="fa fa-spinner"></i>
+                  Update</button>
+      </div>
+</div>

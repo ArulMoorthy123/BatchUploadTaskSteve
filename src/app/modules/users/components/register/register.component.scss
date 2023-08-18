@@ -1,0 +1,18 @@
+.info-text {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  color: #b1b1b1;
+}
+
+.register {
+  &-btn {
+    padding: 10px 30px;
+  }
+  &-terms {
+    .terms-check {
+      z-index: 99;
+      cursor: pointer;
+    }
+  }
+}

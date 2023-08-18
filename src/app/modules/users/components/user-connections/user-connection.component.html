@@ -1,0 +1,202 @@
+<section class="dashboard_cont connection-mod container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="page_title"><i class="fas fa-user-friends"></i> Connections</h2>
+    </div>
+    <div class="col-lg-7">
+      <!-- My Connections -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">My Connections</h5>
+        </div>
+        <div *ngIf="returnedArray?.length" class="card-body">
+          <div class="filter form-group" [formGroup]="connectionSearchSortForm">
+
+            <div class="filter-sort">
+              <select class="form-control" id="sortSelect" formControlName="filterDropdown">
+                <option value="RA">Sort by Recently Added</option>
+                <option value="Name">Sort by Name</option>
+              </select>
+            </div>
+
+            <div class="filter-search">
+              <input type="text" formControlName="searchText" class="form-control" placeholder="Search">
+            </div>
+          </div>
+          <ng-container *ngFor="let connection of returnedArray">
+            <ng-template
+              *ngTemplateOutlet="listConnections; context: {connection: connection, connectionType: INVITATIONS.CONNECTION, widget: false}">
+            </ng-template>
+          </ng-container>
+          <div class="pagination mt-5 d-felx justify-content-center" *ngIf="filteredArray?.length > 5">
+            <pagination [(ngModel)]="currentPage" [itemsPerPage]="5" [totalItems]="filteredArray?.length"
+              (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <!-- Add new connections -->
+      <div class="card add-connections">
+        <div class="card-header">
+          <h5 class="card-title">Search / Add new connections</h5>
+        </div>
+        <div class="card-body">
+          <div class="connectionSearch" [formGroup]="searchConnectionForm">
+            <input type="text" formControlName="searchConnectionString" class="form-control"
+              placeholder="Search Connections">
+            <input type="submit" value="Submit" /><i class="fas fa-search"></i>
+          </div>
+          <div class="search-info d-flex justify-content-center">Search connections by Name OR Email</div>
+          <div class="connections">
+            <ng-container *ngFor="let connection of recommendedUsers">
+              <ng-template
+                *ngTemplateOutlet="listConnections; context: {connection: connection, connectionType: INVITATIONS.REQUEST, widget: true}">
+              </ng-template>
+            </ng-container>
+          </div>
+          <!-- Invite by Email -->
+          <div class="inviteEmail" [formGroup]="inviteForm">
+            <i class="fas fa-envelope"></i>
+            <input class="form-control" formControlName="email" (keypress)="handleKeyPress($event)" type="email"
+              placeholder="Enter the Email" name="">
+            <span *ngIf="submitted && inviteForm.get('email')?.errors?.required" for="email" class="error">
+              Email is required.
+            </span>
+            <span *ngIf="submitted && inviteForm.get('email')?.errors?.pattern" for="email" class="error">
+              Email should be valid.
+            </span>
+            <input type="submit" [disabled]="loading" (click)="inviteUser()"
+              class="btn btn-dark-green btn-lg btn-circle" value="Invite by Email" />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="receivedInvitedUsers?.length" class="card received-invitations">
+        <div class="card-header">
+          <h5 class="card-title">Received Invitations</h5>
+        </div>
+        <div class="card-body">
+          <div class="each-invite received-invite" *ngFor="let connection of receivedInvitedUsers">
+            <div class='ignore text-right'>
+              <a tooltip="Ignore Invitation"
+                (click)="openModalPopUp(connection?.email, 'ignoreRequest', templateConfirm)"><i
+                  class="fas fa-times"></i></a>
+            </div>
+            <ng-template
+              *ngTemplateOutlet="listConnections; context: {connection: connection, connectionType: INVITATIONS.ACCEPT, widget: true}">
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="sentInvitedUsers?.length" class="card sent-invitations">
+        <div class="card-header">
+          <h5 class="card-title">Sent Invitations</h5>
+        </div>
+        <div class="card-body">
+          <div class="each-invite sent-invite" *ngFor="let connection of sentInvitedUsers">
+            <ng-template
+              *ngTemplateOutlet="listConnections; context: {connection: connection, connectionType: INVITATIONS.SENT, widget: true}">
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection Template -->
+  <ng-template #listConnections let-connection="connection" let-connectionType="connectionType" let-widget="widget">
+    <div class="connection d-flex" [class.widget]="widget">
+      <div class="avatar-wd avatar">
+        <a class="cursor-pointer" (click)="openViewProfilePopUp(connection, templateProfile , !widget)">
+          <div class="avater_ico">
+            <img src="{{env.apiurl}}{{connection?.profileImageUrl}}" onerror="this.src='assets/images/avatar.png';" />
+          </div>
+        </a>
+      </div>
+      <div class="d-flex flex-grow-1 justify-content-between">
+        <a class="cursor-pointer w-80 flex-grow-1" title="View Profile"
+          (click)="openViewProfilePopUp(connection, templateProfile , !widget)">
+          <div class="details align-item-center">
+            <ng-container *ngIf="connection.fullName; else elseName">
+              <div class="name text-capitalize">{{connection?.fullName}}</div>
+            </ng-container>
+            <ng-template #elseName>
+              <div class="name text-capitalize">{{connection?.firstName}} {{connection?.lastName}}</div>
+            </ng-template>
+            <div *ngIf="SHOW_EMAIL && connection?.email" class="email color-dim wrap-break-word text-lowercase">
+              {{connection?.email}}
+            </div>
+            <div *ngIf="connection?.designation || connection?.employerName" class="position">
+              <span class="text-capitalize d-inline wrap-break-word">{{connection?.designation}} <span
+                  *ngIf="connection?.designation && connection?.employerName" class="color-dim text-lowercase">at</span>
+                {{connection?.employerName}}</span>
+            </div>
+          </div>
+        </a>
+        <div class="actions">
+          <button *ngIf="connectionType === INVITATIONS.REQUEST" tooltip="Request to Connect" placement="top"
+            show-delay="500" class="btn btn-success btn-sm"
+            (click)="openModalPopUp(connection?.email, 'connectUser', templateConfirm)"><i
+              class="fas fa-plus"></i></button>
+          <a *ngIf="connectionType === INVITATIONS.SENT" tooltip="Cancel Invitation" placement="top" show-delay="500"
+            class="btn btn-cancel" (click)="openModalPopUp(connection?.email , 'declineRequest', templateConfirm)"><i
+              class="fas fa-times"></i></a>
+          <button *ngIf="connectionType === INVITATIONS.ACCEPT" tooltip="Accept Invitation" placement="top"
+            show-delay="500" class="btn btn-success btn-sm" (click)="confirmUserRequest(connection?.email)">
+            <i class="fas fa-check"></i>
+          </button>
+          <button *ngIf="connection?.qbid && connectionType === INVITATIONS.CONNECTION" tooltip="Send Message"
+            placement="top" show-delay="500" [routerLink]="[urlServices.USER_PAGE.MESSAGE_URL]"
+            [queryParams]="{qid: connection?.qbid}" class="btn btn-message "> <i class="far fa-comment"></i> </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Template Confirmation -->
+  <ng-template #templateConfirm>
+    <div class="modal-body">
+      <button type="button" class="close" (click)="closeModal(2)" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <i class="text-warning fas fa-exclamation-triangle" style="font-size:60px;"></i>
+      <h5 class="text-warning text-uppercase mt20">Do you want to confirm?</h5>
+      <hr />
+      <button type="button" class="btn btn-secondary mr-2" (click)="confirm()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="closeModal(2)">No</button>
+    </div>
+  </ng-template>
+
+  <!-- Template Profile -->
+  <ng-template #templateProfile>
+    <div class="modal-content">
+      <div class="modal-header light-greenBg">
+        <h5 class="modal-title semi_bold"><i class="fas fa-address-card"></i>Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal(1)"
+          aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="text-right" *ngIf="clickedFromConnection">
+          <button tooltip="Delete Connection" z-index="1150" placement="right" show-delay="500"
+            (click)="openModalPopUp(userProfile?.email, 'deleteConnection', templateConfirm)"
+            class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i> </button>
+        </div>
+        <user-view-profile [userId]='userProfile.userId'> </user-view-profile>
+      </div>
+    </div>
+  </ng-template>
+
+</section>
+
+<!-- Loader Start -->
+<div *ngIf="loading">
+  <div class="loader_content">
+    <div class="loading">
+      <p>Loading</p>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- Loader End -->

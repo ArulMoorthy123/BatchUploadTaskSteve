@@ -1,0 +1,146 @@
+<section id="register_cont" class="container">
+  <div class="card no-border">
+    <div class="card-header text-center light-greenBg">
+      <h1 class="card-title bold">Register</h1>
+    </div>
+
+    <form class="register_form" [formGroup]="regForm">
+      <div class="card-body">
+        <div class="row">
+
+          <div class="col-lg-6">
+            <label>First Name <sup class="text-danger">*</sup></label>
+            <input class="form-control" type="text" formControlName="firstName" name="firstName"
+              placeholder="First name" (keypress)="handleKeyPress($event)">
+            <span *ngIf="submitted && regForm.get('firstName')?.errors?.required" for="firstName" class="error">
+              First Name is required.
+            </span>
+            <span *ngIf="submitted && regForm.get('firstName')?.errors?.pattern" for="firstName" class="error">
+              First Name should be valid.
+            </span>
+            <span *ngIf="submitted && regForm.get('firstName')?.errors?.min" for="firstName" class="error">
+              First Name should have minimum 3 characters.
+            </span>
+            <span *ngIf="submitted && regForm.get('firstName')?.errors?.max" for="firstName" class="error">
+              First Name should not exceed 50 characters.
+            </span>
+          </div>
+
+          <div class="col-lg-6">
+            <label>Last Name <sup class="text-danger">*</sup></label>
+            <input class="form-control" formControlName="lastName" name="lastName" type="text" placeholder="Last Name"
+              (keypress)="handleKeyPress($event)">
+            <span *ngIf="submitted && regForm.get('lastName')?.errors?.required" for="lastName" class="error">
+              Last Name is required.
+            </span>
+            <span *ngIf="submitted && regForm.get('lastName')?.errors?.pattern" for="lastName" class="error">
+              Last Name should be valid.
+            </span>
+            <span *ngIf="submitted && regForm.get('lastName')?.errors?.min" for="lastName" class="error">
+              Last Name should have minimum 3 characters.
+            </span>
+            <span *ngIf="submitted && regForm.get('lastName')?.errors?.max" for="lastName" class="error">
+              Last Name should not exceed 50 characters.
+            </span>
+          </div>
+
+        </div>
+        <div class="row">
+
+          <div class="col-lg-6">
+            <label for="invitationCode">Invitation Code <sup class="text-danger">*</sup></label>
+            <input (keypress)="handleKeyPress($event)" class="form-control" [readonly]="invitationCode?true : false"
+              formControlName="invitationCode" type="text" placeholder="Invitation Code" name="">
+            <span *ngIf="submitted && regForm.get('invitationCode')?.errors?.required" for="invitationCode"
+              class="error">
+              Invitation Code is required.
+            </span>
+          </div>
+          <div class="col-lg-6 info-text">
+            Currently we are in Beta and registration is based on invite-only.
+          </div>
+
+        </div>
+        <div class="row">
+
+          <div class="col-lg-6">
+            <label>Email <sup class="text-danger">*</sup></label>
+            <input (keypress)="handleKeyPress($event)" class="form-control" [readonly]="emailId?true:false"
+              formControlName="email" type="email" placeholder="Email" name="email">
+            <span *ngIf="submitted && regForm.get('email')?.errors?.required" for="email" class="error">
+              Email is required.
+            </span>
+            <span *ngIf="submitted && regForm.get('email')?.errors?.pattern" for="email" class="error">
+              Email should valid.
+            </span>
+            <span class="error" *ngIf="(regForm.get('email').dirty || submitted)  &&  regForm.get('email')?.errors?.isEmailNotUnique">
+              Email Already Exists.
+            </span>
+            <span *ngIf="emailCheckingloader"> <i class="fa fa-refresh fa-spin"></i>Checking Email...</span>
+          </div>
+
+          <div class="col-lg-6">
+            <label>Phone Number <sup class="text-danger"></sup></label>
+            <input (keypress)="handleKeyPress($event)" class="form-control" maxlength="10" formControlName="phone"
+              type="text" placeholder="Phone No" name="phone">
+            <span *ngIf="regForm.get('phone')?.errors?.pattern" for="phone" class="error">
+              Phone Number should valid.
+            </span>
+            <span class="error" *ngIf="(regForm.get('phone').dirty || submitted)  &&  regForm.get('phone')?.errors?.isMobileNotUnique">
+              Mobile Number Already Exists.
+            </span>
+            <span *ngIf="mobileCheckingLoader"> <i class="fa fa-refresh fa-spin"></i>Checking Mobile Number.....</span>
+          </div>
+
+        </div>
+        <div class="row">
+
+          <div class="col-lg-6">
+            <label>Password <sup class="text-danger">*</sup></label>
+            <input (keypress)="handleKeyPress($event)" formControlName="password" class="form-control mb5"
+              type="password" placeholder="Password" name="">
+            <span *ngIf="submitted && regForm.get('password')?.errors?.required" for="password" class="error">
+              Password is required.
+            </span>
+          </div>
+
+          <div class="col-lg-6">
+            <label>Confirm Password <sup class="text-danger">*</sup></label>
+            <input (keypress)="handleKeyPress($event)" formControlName="confirmPassword" class="form-control mb5"
+              type="password" placeholder="Confirm Password" name="">
+            <span *ngIf="submitted && regForm.get('confirmPassword')?.errors?.required" for="confirmPassword"
+              class="error">
+              Confirm Password is required.
+            </span>
+            <span *ngIf="regForm.errors?.isConfirmNewPasswordNotSame && regForm.get('confirmPassword').dirty"
+              for="confirmPassword" class="error">
+              Confirm Password & password should be same.
+            </span>
+          </div>
+
+        </div>
+        <div class="register-terms custom-control custom-checkbox">
+          <input type="checkbox" class="terms-check custom-control-input" formControlName="term">
+          <label class="custom-control-label" for="customCheck">I agree to the <a class="btn-link" target="_blank"
+              routerLink="/terms">Terms of
+              Use</a> and <a class="btn-link" target="_blank" routerLink="/privacy-policy">Privacy
+              Policy</a>.</label>
+          <span *ngIf="submitted && regForm.get('term').errors?.pattern" for="title" class="error">
+            Please Agree Terms and Condition
+          </span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="register-btn">
+          <button type="button" (click)="submitForm()"
+            class="registerbtn btn btn-lg btn-dark-green bold text-uppercase btn-circle w-100"
+            [disabled]="loading || emailCheckingloader || mobileCheckingLoader">
+            Register
+            <i *ngIf="loading || emailCheckingloader || mobileCheckingLoader" class="fas fa-spinner fa-spin"></i>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</section>

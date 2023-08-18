@@ -1,0 +1,72 @@
+<div class="row" [formGroup]="basicDetailsForm">
+      <div class="col-12">
+            <div class="form-group">
+                  <label>First Name<sup class="text-danger">*</sup></label>
+                  <input class="form-control" readonly formControlName="firstName" type="text" placeholder="Enter First name"
+                        name="">
+                  <span *ngIf="submitted && basicDetailsForm.get('firstName')?.errors?.required" for="firstName"
+                        class="error">
+                        First Name is required.
+                  </span>
+                  <span *ngIf="submitted && basicDetailsForm.get('firstName')?.errors?.pattern" for="firstName"
+                        class="error">
+                        Last Name not valid.
+                  </span>
+            </div>
+
+            <div class="form-group">
+                  <label>Last Name<sup class="text-danger">*</sup></label>
+                  <input class="form-control" readonly formControlName="lastName" type="text" placeholder="Enter Last name"
+                        name="">
+                  <span *ngIf="submitted && basicDetailsForm.get('lastName')?.errors?.required" for="lastName"
+                        class="error">
+                        Last Name is required.
+                  </span>
+                  <span *ngIf="submitted && basicDetailsForm.get('lastName')?.errors?.pattern" for="lastName"
+                        class="error">
+                        Last Name not valid.
+                  </span>
+            </div>
+
+            <div class="form-group">
+                  <label>Nationality<sup class="text-danger"></sup></label>
+                  <input class="form-control " formControlName="nationality" type="text"
+                        placeholder="Enter Nationality">
+            </div>
+            <!--
+            <div class="form-group">
+                  <label>Date of birth(MM-DD-YYYY)<sup class="text-danger"></sup></label>
+                  <input
+                    class="form-control"
+                    onkeydown="return false"
+                    formControlName="dob"
+                    type="text"
+                    placeholder="mm-dd-yyyy"
+                    bsDatepicker
+                    [maxDate]="maxDate"
+                    >
+                  <span *ngIf="submitted && basicDetailsForm.get('dob')?.errors?.required" for="dob" class="error">
+                        Date of Birth is required.
+                  </span>
+              </div>
+            -->
+
+
+            <div class="form-group">
+                  <label>Gender<sup class="text-danger"></sup></label>
+                  <select class="form-control" formControlName="gender">
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Prefer Not to Answer">Prefer Not to Answer</option>
+                        <option value="Other">Other</option>
+                  </select>
+            </div>
+      </div>
+      <div class="col-12">
+            <button type="button" [disabled]="loading" (click)="submitForm()"
+                  class="btn  btn-dark-green text-uppercase">Submit
+                  <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> </button>
+      </div>
+</div>
+

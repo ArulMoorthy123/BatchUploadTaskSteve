@@ -1,0 +1,97 @@
+<section *ngIf="!loading && userProfileDetails" class="dashboard_cont their-profile container">
+    <div class="card">
+      <div class="card-body profile_detail row">
+        <div class="col-md-4">
+          <div class="self_profile_photo text-center">
+            <img src="{{profileImageUrl}}" onerror="this.src='assets/images/avatar2.png';" alt="" />
+          </div>
+        </div>
+        <div class="col-md-8 align-self-center">
+          <h2 class="text-capitalize">{{userProfileDetails?.firstName}} {{userProfileDetails?.lastName}}</h2>
+          <div class="self_skills">
+            <span *ngFor="let exp of userProfileDetails?.occupation">
+              <span *ngIf="exp?.tillDate">
+                {{exp?.occupationName}} at {{exp?.employerName}}
+              </span>
+            </span>
+          </div>
+          <div *ngIf="userProfileDetails?.emailId" class="contact_details_sub"><i class="far fa-envelope"></i>
+            {{userProfileDetails?.emailId}}</div>
+          <div *ngIf="userProfileDetails?.mobileNumber" class="contact_details_sub"><i class="fas fa-phone"></i>
+            {{userProfileDetails?.mobileNumber}}</div>
+          <div *ngIf="userProfileDetails?.country" class="contact_details_sub"><i class="fas fa-map-pin"></i>
+            {{userProfileDetails?.country}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Experience Start -->
+    <div *ngIf="userProfileDetails?.occupation?.length" class="card experience">
+      <div class="card-header">
+        <h5 class="card-title">Experience</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12" *ngFor="let exp of userProfileDetails?.occupation">
+            <div *ngIf="exp?.occupationName && exp?.employerName" class="">
+              <span class="exp_detail_sub text-capitalize font-weight-bold" *ngIf="exp?.occupationName">{{exp?.occupationName}}</span>
+              <span class="exp_detail_sub text-lowercase" *ngIf="exp?.occupationName && exp?.employerName"> at </span>
+              <span class="exp_detail_sub text-capitalize font-weight-bold" *ngIf="exp?.employerName">{{exp?.employerName}}</span>
+              ( <span *ngIf="exp?.startdate && (exp?.endDate || exp?.tillDate)">{{exp?.startdate}} -
+                {{exp?.tillDate ? 'Present' : exp?.endDate}}</span> )
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Experience End -->
+    <!-- Skills Start -->
+    <div *ngIf="userProfileDetails?.skill?.length" class="card skill">
+      <div class="card-header">
+        <h5 class="card-title">Skills</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-xl-12 my_skills">
+            <span *ngFor="let skill of userProfileDetails?.skill">
+              {{skill?.name}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Skills End -->
+    <!-- Education Start -->
+    <div *ngIf="userProfileDetails?.skill?.education" class="card education">
+      <div class="card-header">
+        <h5 class="card-title">Education</h5>
+      </div>
+      <div class="card-body pb0">
+        <div class="row">
+          <div class="col-xl-6" *ngFor="let edu of userProfileDetails?.education">
+            <div class="eduaction_detail">
+              <div class="exp_detail_sub semi_bold">{{edu?.qualificationType}}</div>
+              <div class="exp_detail_sub mb10">{{edu?.institution}}</div>
+              <div class="exp_detail_sub" style="opacity: 0.5; font-size:14px;" *ngIf="edu?.tillDate==false">
+                <i class="far fa-calendar-check"></i> {{edu?.startDate}} to {{edu?.endDate}}
+              </div>
+              <div class="exp_detail_sub" style="opacity: 0.5; font-size:14px;" *ngIf="edu?.tillDate==true">
+                <i class="far fa-calendar-check"></i> {{edu?.startDate}} to Present
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</section>
+
+
+<!-- Loader Start -->
+<div *ngIf="loading">
+  <div class="loader_content">
+    <div class="loading">
+      <p>Loading</p>
+      <span></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<section class="dashboard_cont container">
+            <div class="row">
+                <div class="col-12">
+                  <h1 class="page_title">My Profile</h1>
+                   <div class="card">
+                      <div class="row">
+                          <div class="col-lg-4 col-md-5 col-sm-6 profile_left">
+                            <div class="profile_photo" [formGroup]="mainProfileForm">
+                                <div *ngIf="profileImageUrl==null">
+                                  <img class="head-profile-box" src="assets/images/avatar2.png">
+                                </div>
+                                <div *ngIf="profileImageUrl!=null">
+                                  <img class="head-profile-box" [src]="profileImageUrl" />
+                                </div>
+                                <!--  <a href="#" class="btn btn-success"><i class="far fa-edit"></i> Upload Photo</a> -->
+                                <div class="btn btn-success">
+                                  <i class="far fa-edit"></i>
+                                  <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> Upload Photo
+                                  <input type="file" formControlName="userProfileImage" (change)="handleImageInput($event.target.files)"   accept="image/png,image/jpeg">
+                                  <span class="error" *ngIf="imageSizeMsg">
+                                    {{imageSizeMsg}}
+                                  </span>
+                                </div>
+                                <a class="btn btn-danger" (click)="openConfirmDeletePopUp(templateConfirm)"><i class="far fa-trash-alt" ></i> Delete Photo</a>
+
+
+                            </div>
+                            <div class="list-group profile_tab" role="tablist">
+                              <a class="list-group-item list-group-item-action" [class.active]="activeTab=='BASIC'"  (click)="changeTab('BASIC')"  aria-controls="home">Basic Details</a>
+                              <a class="list-group-item list-group-item-action" [class.active]="activeTab=='CONTACT'" (click)="changeTab('CONTACT')"   aria-controls="profile">Contact Details</a>
+                              <a class="list-group-item list-group-item-action" [class.active]="activeTab=='EDUCATION'" (click)="changeTab('EDUCATION')"  aria-controls="messages">Education Details</a>
+                              <a class="list-group-item list-group-item-action" [class.active]="activeTab=='SKILL'" (click)="changeTab('SKILL')"  aria-controls="settings">Skills</a>
+                              <a class="list-group-item list-group-item-action" [class.active]="activeTab=='EXP'" (click)="changeTab('EXP')"  aria-controls="settings">Experience Details</a>
+                            </div>
+                          </div>
+                          <div class="col-lg-8 col-md-7 col-sm-6">
+                           <div class="tab-content profile_form">
+                             <!-- Basic Details -->
+                             <div class="tab-pane fade show " [class.active]="activeTab=='BASIC'"  role="tabpanel" aria-labelledby="list-home-list">
+                               <div class="row">
+                                   <div class="col-md-8 offset-md-2">
+                                       <app-user-basic-details [userProfileData]="userProfileData" (reloadProfileEvent)="getProfile()"></app-user-basic-details>
+                                   </div>
+                                </div>
+                             </div>
+                             <div class="tab-pane fade show " [class.active]="activeTab=='CONTACT'">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <app-user-contact-details [userProfileData]="userProfileData" (reloadProfileEvent)="getProfile()"></app-user-contact-details>
+                                  </div>
+                               </div>
+                            </div>
+
+                            <div class="tab-pane fade show " [class.active]="activeTab=='EDUCATION'">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <app-user-education-details [userProfileData]="userProfileData" (reloadProfileEvent)="getProfile()"></app-user-education-details>
+                                  </div>
+                               </div>
+                            </div>
+
+
+                            <div class="tab-pane fade show " [class.active]="activeTab=='SKILL'">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <app-user-skill-details [userProfileData]="userProfileData" (reloadProfileEvent)="getProfile()"></app-user-skill-details>
+                                  </div>
+                               </div>
+                            </div>
+                            <div class="tab-pane fade show " [class.active]="activeTab=='EXP'">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <app-user-experience-details [userProfileData]="userProfileData" (reloadProfileEvent)="getProfile()"></app-user-experience-details>
+                                  </div>
+                               </div>
+                            </div>
+
+                           </div>
+                         </div>
+                       </div>
+                  </div>
+             </div>
+           </div>
+            <!-- Loader Start -->
+      <div *ngIf="loading">
+        <div class="loader_content">
+          <div class="loading">
+              <p>Loading</p>
+              <span></span>
+          </div>
+        </div>
+      </div>
+<!-- Loader End -->
+</section>
+<ng-template #templateConfirm >
+  <div class="modal-body">
+    <button type="button" class="close" (click)="decline()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <i class="text-warning fas fa-exclamation-triangle" style="font-size:60px;"></i>
+    <h5 class="text-warning text-uppercase mt20">Do you want to confirm?</h5>
+    <hr/>
+    <button type="button" class="btn btn-secondary mr-2" (click)="confirm()" >Yes</button>
+     <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+  </div>
+</ng-template>

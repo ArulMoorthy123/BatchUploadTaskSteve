@@ -1,0 +1,22 @@
+@media (max-width: 992px) {
+  .navbar-light #main_nav .navbar-nav li {
+    padding: 0 12px;
+  }
+
+  .register_form .text-muted {
+    padding-top: 0px;
+    margin-top: -20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .slogan_slider {
+    margin: 0px 20px 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+  }
+
+  #footer {
+    text-align: center;
+  }
+}

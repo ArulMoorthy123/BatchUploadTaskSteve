@@ -1,0 +1,29 @@
+.plan-widget {
+  cursor: pointer;
+  .plans {
+    .plan {
+      border-bottom: 1px solid #dee2e6;
+      &:hover {
+        background: #fafafa;
+      }
+      &.DONE {
+        border-left: 3px solid #dc3545;
+      }
+      &.IN_PROGRESS {
+        border-left: 3px solid #28a745;
+      }
+      &.OPEN {
+        border-left: 3px solid #ffc107;
+      }
+    }
+  }
+}
+
+.ellipsis- {
+  &2ln {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}

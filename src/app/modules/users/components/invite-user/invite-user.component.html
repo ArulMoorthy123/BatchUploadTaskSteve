@@ -1,0 +1,38 @@
+<section id="register_cont" class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+          <div class="card no-border">
+            <div class="card-header text-center light-greenBg">
+                <h2 class="card-title semi_bold"><i style="color: #fff; width: 40px; height: 40px; font-size: 22px; line-height: 40px; background-color: #358a36; border-radius:50%;" class="fa fa-user-plus"></i>
+                	<br /> Invite a New User</h2>
+            </div>
+            <div class="card-body">
+              <div class="invite_form" [formGroup]="inviteForm">
+                <div class="row">
+                  <div class="col-lg-12 mt20">
+                    <input class="form-control" formControlName="email" type="email"  placeholder="Enter the Email" name="">
+                    <span *ngIf="submitted && inviteForm.get('email')?.errors?.required"
+                    for="email" class="error">
+                    Email is required.
+              </span>
+              <span *ngIf="submitted && inviteForm.get('email')?.errors?.pattern"
+                    for="email" class="error">
+                    Email should valid.
+              </span>
+                    <!-- <p><small class="text-muted">Multiple user can be invited by entering comma seperated email ids.</small></p> -->
+                  </div>
+                </div>
+                <hr />
+                <button type="button" [disabled]="loading" (click)="submitForm()"
+                class="btn btn-lg btn-dark-green bold text-uppercase btn-circle w-100">Submit
+                 <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> </button>
+                <!-- <input type="submit" class="btn btn-lg btn-dark-green bold text-uppercase btn-circle w-100" value="Submit"> -->
+            </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+

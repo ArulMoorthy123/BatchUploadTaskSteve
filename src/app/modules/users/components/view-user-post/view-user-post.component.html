@@ -1,0 +1,90 @@
+<section class="dashboard_cont container">
+    <div class="row">
+        <div class="col-xl-10 col-lg-8 col-sm-12 mx-auto">
+          <!-- postListing -->
+              <div class="postDetail bg-white rounded p-4 shadow">
+                <div class="postHeader">
+                  <div class="avater_ico">
+                    <img *ngIf="!(postDetail?.profileImageUrl)" src="assets/images/avatar.png" alt="">
+                    <img *ngIf="postDetail?.profileImageUrl" src="{{env.apiurl}}{{postDetail?.profileImageUrl}}" alt="">
+                    </div>
+                    <strong>{{postDetail?.strCreatedBy}}</strong>
+                    <div class="clearfix"></div>
+                    <span class="post_date"><i class="far fa-clock"></i> {{postDetail?.createdDate | date:'medium'}} </span>
+                </div>
+                <div class="post_contnt pt-3">
+                  <p>
+                    {{postDetail?.content}}
+                  </p>
+               </div>
+
+                 <div class="postFooter pt-3">
+                  <div class="post_images">
+                    <h4><i class="far fa-file-image"></i> Post Images</h4>
+                      <div *ngFor="let postImages of postDetail?.urlList">
+                        <span *ngIf="postImages?.type==='image'">
+                        <a class="post_img"><img src="{{env.apiurl}}{{postImages?.url}}"/></a>
+                        </span>
+                     </div>
+                  </div>
+                  <div class="post_videos">
+                    <h4><i class="far fa-file-video"></i> Post Videos</h4>
+                    <span *ngFor="let postVideo of postDetail?.urlList">
+                      <a href="#" class="post_video" *ngIf="postVideo?.type==='video'">
+                      <video width="320" height="240" controls>
+                        <source src="{{env.apiurl}}{{postVideo?.url}}" type="video/mp4">
+                      </video>
+                    </a>
+                    </span>
+                  </div>
+                     <div class="post_doc">
+                       <h4><i class="far fa-file-word"></i> Post Doucments</h4>
+                       <span *ngFor="let postDocs of postDetail?.urlList">
+                        <span *ngIf="postDocs?.type==='document';">
+                         <a href="{{env.apiurl}}{{postDocs?.url}}" class="btn btn-outline-secondary btn-sm">
+                            <i class="far fa-file-pdf"></i>
+                            Download </a>
+                        </span>
+                      </span>
+                     </div>
+                     <!-- Comment Form Start -->
+                     <div class="comment_form mt-3 p-4" [formGroup]="postCommentForm">
+                       <div class="comment_header">
+                         <h6 class="float-left"><i class="far fa-comments"></i> Leave a Reply</h6>
+                       </div>
+                         <textarea class="form-control" formControlName="commentContent" rows="4" placeholder="Enter your comment here"></textarea>
+                         <span *ngIf="submitted && postCommentForm.get('commentContent')?.errors?.required"
+                          for="email" class="error">
+                          This is required.
+                          </span>
+                         <div class="text-right pt-2">
+                           <button class="btn btn-success" type="button" (click)="postComment()"><i class="fas fa-reply"></i> Post Comment</button>
+                          </div>
+                     </div>
+                     <!-- Comment Form End -->
+
+                     <!-- Comment List start -->
+                     <div class="comment_list mt-4">
+                       <h6><i class="fas fa-reply"></i> Comments <span class="text-muted">{{postDetail?.commentList.length}}</span></h6>
+                       <div class="comment" *ngFor="let commentData of postDetail?.commentList">
+                         <div class="avater_ico">
+                           <img *ngIf="!(commentData?.profileImageUrl)" src="assets/images/avatar.png" alt="">
+                           <img *ngIf="commentData?.profileImageUrl" src="{{env.apiurl}}{{commentData?.profileImageUrl}}" alt="">
+                         </div>
+                         <div class="comment_text">
+                           <div class="comment_user">{{commentData.strCreatedByName}}</div>
+                           <span class="comment_date"><i class="far fa-clock"></i> {{commentData.createdDate | date:'medium'}}</span>
+                           <div class="clearfix"></div>
+                           <p>
+                            {{commentData.comment}}
+                           </p>
+                        </div>
+                       </div>
+                     </div>
+                     <!-- Comment List end -->
+                 </div>
+
+              </div>
+        </div><!-- End -->
+    </div>
+  </section>

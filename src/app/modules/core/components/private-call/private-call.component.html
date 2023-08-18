@@ -1,0 +1,84 @@
+<div class="modal-content private-call">
+  <div class="modal-header">
+    <div>
+      <h5 class="mb-0">{{currentDialogue?.name}}</h5>
+      <span class="conf-duration">Call duration: {{ qbVideo.callTimeSec | secToTime }}</span>
+    </div>
+    <button type="button" (click)="endCall()" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+  </div>
+
+  <div class="modal-body conference grey-bg">
+
+    <div class="conf-pane">
+      <ng-container *ngFor="let u of userFeedData">
+        <div class="conf-container" [hidden]="self_user_id == u.user_id && remoteScreenShare">
+          <ng-container>
+            <video class="conf-video"
+              [hidden]="u.videoStatus==false || (self_user_id == u.user_id && localScreenShare) || currentCall.isAudioOnly"
+              [class.mirror]="u.screenSharing==false" id="callerStream_{{u.user_id}}"
+              poster="{{u.user_id | chatProfileImage }}" autoplay playsinline>
+            </video>
+          </ng-container>
+
+          <ng-container
+            *ngIf="u.videoStatus==false || (self_user_id == u.user_id && localScreenShare) || currentCall.isAudioOnly">
+            <div class="conf-audio">
+              <img class="conf-img" src="{{u.user_id | chatProfileImage }}" alt="">
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="conf-container conf-message" [hidden]="show_chat==false">
+      <ng-container *ngIf="dialogueId">
+        <app-message-containner class="message-container" *ngIf="show_chat" [showCall]="false"
+          [dialogueId]="dialogueId">
+        </app-message-containner>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+  <div class="modal-footer">
+    <div class="call-controls-inner">
+      <ng-container *ngIf="!currentCall.isAudioOnly">
+        <button class="btn controls btn-plain" *ngIf="videoStatus || localScreenShare" (click)="stopVideo()">
+          <i class="fas fa-video"></i>
+          <!-- <span>Video</span> -->
+        </button>
+
+        <button class="btn controls btn-plain active" *ngIf="!videoStatus" (click)="shareCamera()">
+          <i class="fas fa-video-slash"></i>
+          <!-- <span>Video</span> -->
+        </button>
+      </ng-container>
+
+      <button class="btn controls btn-plain active" (click)="toggleStream('audio',true)" *ngIf="!qbVideo.audioStatus">
+        <i class="fas fa-microphone-alt-slash"></i>
+        <!-- <span>Mute</span> -->
+      </button>
+      <button (click)="toggleStream('audio',false)" class="btn controls btn-plain" *ngIf="qbVideo.audioStatus">
+        <i class="fas fa-microphone"></i>
+        <!-- <span>Audio</span> -->
+      </button>
+      <ng-container *ngIf="!currentCall.isAudioOnly">
+        <button (click)="shareScreen()" *ngIf="!localScreenShare" class="btn share-screen controls btn-plain">
+          <i class="fas fa-desktop"></i>
+          <!-- <span>Share Screen</span> -->
+        </button>
+      </ng-container>
+
+      <button class="btn active controls btn-plain" (click)="endCall()">
+        <i class="fas fa-phone" style="transform: rotate(226deg);"></i>
+        <!-- <span>End Call</span> -->
+      </button>
+      <!-- [disabled]="userFeedData.length==1 || !userFeedData" -->
+      <button class="btn controls btn-plain" (click)="toggleChat()" [class.active]="show_chat" name="button">
+        <i class="far fa-comment"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<canvas #canvas style="display: none;"></canvas>

@@ -1,0 +1,52 @@
+<section class="dashboard_cont container sessions">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="page_title"><i class="far fa-clock mr-2"></i>Sessions</h2>
+    </div>
+    <div class="col-12 mb-4 text-right">
+      <button type="button" class="btn btn-primary" (click)="createSession()"><i class="fa fa-plus mr-2"></i>Create
+        Session</button>
+    </div>
+    <div class="col-12 session-mod">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title float-left">My Sessions</h5>
+        </div>
+        <div class="card-body">
+          <accordion [isAnimated]="true">
+            <ng-container *ngIf="loading">
+              <div class="m-5 d-flex justify-content-center">
+                <i class="fas fa-circle-notch fa-3x fa-spin text-info"></i>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!loading">
+              <ng-container *ngIf="allSessions?.length && sessionList; else sessionEmpty">
+                <ng-container *ngFor="let list of SESSION_LIST">
+                  <div *ngIf="sessionList[list].length">
+                    <h5 class="card-title text-capitalize">{{list.toLowerCase()}} Sessions</h5>
+                    <app-session-item (refreshList)="getSessionAll()" *ngFor="let session of sessionList[list]"
+                      (onEditSession)="createSession($event)" [currentUser]="currentUser" [sessionGroup]="list" [sessionData]="session">
+                    </app-session-item>
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-template #sessionEmpty>
+                <div class="d-flex justify-content-center">
+                  <div class="on-empty m-5">
+                    <div *ngIf="sessionList?.length === 0" class="alert alert-info" role="alert">
+                      {{MESSAGES.SESSION_EMPTY}}
+                    </div>
+                    <div *ngIf="sessionList === null" class="alert alert-danger" role="alert">
+                      {{MESSAGES.COMMON_ERROR}}
+                    </div>
+                    <i *ngIf="sessionList === undefined" class="fas fa-circle-notch fa-3x fa-spin text-info"></i>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+          </accordion>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

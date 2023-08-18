@@ -1,0 +1,65 @@
+<header id="header" class="navbar navbar-expand-md navbar-light bg-white fixed-top">
+  <div class="container p-0">
+    <div class="col-sm-12">
+      <a class="navbar-brand" [routerLink]="urlServices.USER_PAGE.DASHBOARD_URL"><img src="assets/images/logo.png" alt="Career Journey logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav"
+        aria-controls="main_nav" aria-expanded="false" (click)="toggleNavMobile()" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="main_nav" class="collapse navbar-collapse" [class.show]="navMobileOpen">
+        <ul class="navbar-nav">
+          <ng-container *ngIf="!auth.loginStatus()">
+            <li class="nav-item">
+              <a class="nav-link " [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: true }"
+                routerLink="/">Home</a>
+            </li>
+            <li class="nav-item" *ngFor="let nav of navDefault">
+              <a class="nav-link nav-{{nav}}" [routerLinkActive]="['active']"
+                [routerLink]="urlServices.urlObj[nav]?.url">{{urlServices.urlObj[nav]?.title}}</a>
+            </li>
+            <li class="dropdown" [class.show]="loginModalOpen">
+              <button class="btn btn-success" (click)="toggleLoginModel()">Log In</button>
+              <div class="login_panel dropdown-menu no-border" [class.show]="loginModalOpen">
+                <h4>Login</h4>
+                <button class="loginClose" (click)="toggleLoginModel()">
+                  <i class="fas fa-times"></i>
+                </button>
+                <app-login></app-login>
+              </div>
+            </li>
+          </ng-container>
+          <ng-container *ngIf="auth.loginStatus()">
+            <li class="nav-item" *ngFor="let nav of navAuth">
+              <a class="nav-link nav-{{nav}}" [routerLinkActive]="['active']"
+                [routerLink]="urlServices.urlObj[nav]?.url">{{urlServices.urlObj[nav]?.title}}</a>
+            </li>
+            <li class="dropdown" [class.show]="loginModalOpen"
+              (clickOutside)="closeLoginModal()">
+              <div class="dropdown-toggle user_nav" (click)="toggleLoginModel()">
+                <div class="avater_ico">
+                  <img
+                    [src]="auth.currentUserValue.profileImageUrl != null ? env.apiurl+auth.currentUserValue.profileImageUrl : 'assets/images/avatar.png'"
+                    title="{{auth.currentUserValue.profileImageUrl != null ? auth.currentUserValue.firstName:''}}">
+                </div>
+                <span class="d-none d-md-inline-block fname">{{auth.currentUserValue.firstName}}</span>
+                <b class="fas fa-chevron-down"></b>
+              </div>
+              <ul class="dropdown-menu" [class.show]="loginModalOpen" style="right: 0;">
+                <li><a class="dropdown-item" [routerLink]="urlServices.USER_PAGE.PROFILE_URL">Profile</a></li>
+                <li><a class="dropdown-item" [routerLink]="urlServices.USER_PAGE.UPDATE_PASSWORD_URL">Change Password</a>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="javascript:;" (click)="logout()">Logout</a></li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<!--
+<div *ngIf="auth.loginStatus()">
+  <app-auto-logout></app-auto-logout>
+</div>
+ -->

@@ -1,0 +1,88 @@
+<!-- <div class="alert alert-primary" *ngIf="loader" role="alert">
+      {{getQBStatus}}
+</div>
+<section class="container-fluid message_cont"> -->
+  <!-- Loader Start -->
+<div *ngIf="getQBStatus && loading">
+  <div class="loader_content">
+    <div class="loading">
+      <p>Loading</p>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- Loader End -->
+
+<section  *ngIf="getQBStatus && !loading" class="container-fluid message_cont">
+      <div class="row" [formGroup]="searchForm">
+            <div class="col-sm-3 inbox_people">
+                  <!-- Friends start -->
+                  <!-- <div class="inbox_people"> -->
+                  <!-- <div class="mesg_header">
+                                    <button class="btn btn-dark-green" (click)="openGroupModal('new')" name="button"><i
+                                                class="fas fa-group"></i> New
+                                          Group</button>
+                              </div> -->
+                  <div class="headind_srch">
+                        <input type="text" class="form-control" placeholder="Search or new chat"
+                              formControlName="searchinput">
+                        <button type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                  </div>
+                  <!-- Chat User start -->
+                  <div class="frnd_list" *ngIf="getQBStatus">
+                        <ul class="inbox_chat nav nav-tabs" role="tablist">
+                              <app-dialogue-list style="width: 100%" *ngIf="!searchForm.get('searchinput').value"
+                                    [searchText]="searchForm.get('searchinput').value"
+                                    (onSelectDialogueListEvent)="onUserSelect($event)" [dialogueId]="dialogueId">
+                              </app-dialogue-list>
+
+                              <app-filter-chat style="width: 100%" *ngIf="searchForm.get('searchinput').value"
+                                    (onSelectContactListEvent)="onUserSelect($event)"
+                                    [searchText]="searchForm.get('searchinput').value"></app-filter-chat>
+                        </ul>
+                        <!-- Chat User end -->
+
+
+                        <div class="mesg_btns">
+                              <button class="btn btn-dark-green btn-circle" (click)="openGroupModal('new')"
+                                    name="button" data-tooltip="New Group"><i class="fas fa-users"></i></button>
+                        </div>
+                  </div>
+
+
+
+                  <!-- Friends End -->
+            </div>
+
+            <!-- Messages History start -->
+            <div id="mesgs" class="col-sm-9">
+                  <app-message-containner [dialogueId]="dialogueId"> </app-message-containner>
+            </div>
+            <!-- message History End -->
+      </div>
+</section>
+
+<!-- group modal start-->
+
+<!-- <div class="modal fade" [class.show]="groupModal" tabindex="-1" [style.display]="groupModal ? 'block' :'none'"
+      role="dialog" aria-labelledby="sendMsgLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document"> -->
+<ng-template #groupMemberTemplate>
+      <!-- <div class="modal-content">
+            <div class="modal-header text-center">
+                  <h5 class="modal-title semi_bold"><i
+                              class="far fa-edit"></i>{{type== 'newGroup' ? 'New Group' : ' Add New Member' }}</h5>
+                  <button type="button" class="close" (click)="groupModal= false" data-dismiss="modal"
+                        aria-label="Close">&times;</button>
+            </div> -->
+      <!-- <div class="modal-body pt0" style="overflow: scroll;max-height: 75vh;" *ngIf="groupModal"> -->
+      <app-group-creation (onCloseEvent)="closeGroupModal($event)" [type]="type" [dialogueId]="dialogueId_Panel">
+      </app-group-creation>
+      <!-- </div> -->
+
+
+      <!-- </div> -->
+</ng-template>
+
+<!-- </div>
+</div> -->

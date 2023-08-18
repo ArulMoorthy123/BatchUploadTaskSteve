@@ -1,0 +1,44 @@
+.dashboard-mod {
+  .prof-pane {
+    .profile {
+      .name {
+        border-top: 1px solid rgba(0, 0, 0, 0.15);
+        margin-top: 15px;
+        padding-top: 15px;
+        color: #485e48;
+      }
+      .position {
+        font-size: small;
+        @extend .color-dim;
+      }
+    }
+  }
+  .connections {
+    padding: 0 10px;
+    .connection {
+      &.row:hover {
+        background-color: #fafafa;
+      }
+      padding: 6px 0;
+      margin: 0 -10px 0px -10px;
+      border-bottom: 1px solid #dee2e6;
+      .details,
+      .actions {
+        padding-left: 10px;
+        .btn-message {
+          i {
+            color: #3598db;
+          }
+        }
+      }
+    }
+  }
+}
+.color-dim {
+  color: #666666;
+}
+
+.bg-green {
+  background: #f6fbf6;
+  border-bottom: 1px solid #ddf0dd;
+}

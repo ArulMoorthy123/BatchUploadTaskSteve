@@ -1,0 +1,268 @@
+<section class="dashboard_cont container">
+  <div class="row">
+    <div class="col-12">
+        <h2 class="page_title"><i class="fas fa-users"></i> Groups</h2>
+    </div>
+    <div class="col-lg-7">
+      <!--My Groups  -->
+      <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">My Groups</h5>
+        </div>
+        <div class="card-body">
+          <div class="row table_search">
+              <div class="col-sm-6"><p style="color: #6b7e6b;">
+                 You are member of
+                <strong style="color: #485e48;" class="text-uppercase">{{userGroupList?.length}} groups</strong></p></div>
+              <div class="col-sm-6"  [formGroup]="groupSearchForm">
+                  <input type="text" class="form-control" formControlName="searchText" placeholder="Search">
+              </div>
+          </div>
+          <div class="grp_list" *ngFor="let content of returnedArray">
+            <div class="grp_details">
+              <div class="grp_no">
+                <div class="avater_ico">
+                  <div  *ngIf="content?.groupImageUrl==null">
+                    <img src="assets/images/avatar.png" alt="" />
+                  </div>
+                  <div  *ngIf="content?.groupImageUrl!=null">
+                    <img src="{{env.apiurl}}{{content?.groupImageUrl}}" alt="" />
+                  </div>
+                </div>
+                <i class="fas fa-users"></i>
+                {{content?.memberList.length}}
+                <span>Members</span>
+              </div>
+              <div class="grp_title">
+                <strong>{{content?.groupName}}</strong>
+                <div class="created_by">Created by :<span>{{content?.createdByName}}</span></div>
+              </div>
+              <p>{{content?.description}}</p>
+            </div>
+            <div class="clearfix"></div>
+            <div class="grp_bot">
+              <button tooltip="Edit Members" placement="top" show-delay="500" *ngIf="content?.createdByName==='YOU'"   name="button" (click)="editGroupPopUp(content,editGroupTemplate)" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> </button>
+              <button  tooltip="Post" placement="top" show-delay="500" *ngIf="content?.memberList.length>1" class="btn btn-success btn-sm" (click)="createPostPopUp(content?.id,content,createPostTemplate)">Create Post</button>
+              <button tooltip="Delete Group" placement="top" show-delay="500" *ngIf="content?.createdByName==='YOU'" (click)="openConfirmDeletePopUp(content?.id, templateConfirm)" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i> </button>
+            </div>
+          </div>
+
+          <div class="table_pagination">
+            <pagination [(ngModel)]="currentPage" [itemsPerPage]="5" [totalItems]="filteredArray?.length" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </div>
+      </div>
+      <!-- My Groupa End -->
+    </div>
+
+    <div class="col-lg-5">
+        <!-- Create New Group -->
+        <div class="card">
+          <div class="card-header light-greenBg">
+              <h5 class="card-title">Create New Group</h5>
+          </div>
+          <div class="card-body" [formGroup]="userGroupForm">
+
+              <div class="form-group">
+                <label>Group Name<sup class="text-danger">*</sup></label>
+                <input type="text" formControlName="groupName" class="form-control" placeholder="Enter Group Name">
+                <span *ngIf="submitted && userGroupForm.get('groupName')?.errors?.required" for="groupName"
+                 class="error">
+                  Name is required.
+                </span>
+              </div>
+              <div class="row mb15">
+                    <div class="col-4 text-center">
+                      <div class="grp_photo">
+                        <img src="assets/images/avatar2.png" alt="" />
+                      </div>
+                    </div>
+                    <div class="col-8">
+                      <div class="form-group">
+                        <label>Select Group Photo</label>
+                        <input type="file" class="form-control" formControlName="groupImage" (change)="handleGroupImageInput($event.target.files)"   accept="image/png,image/jpeg">
+
+                        <span class="error" *ngIf="imageSizeMsg">
+                          {{imageSizeMsg}}
+                        </span>
+                      </div>
+                    </div>
+              </div>
+              <div class="form-group">
+                <label>Group Description<sup class="text-danger">*</sup></label>
+                <textarea class="form-control" formControlName="description" rows="3" placeholder="Enter Group Description"></textarea>
+                <span *ngIf="submitted && userGroupForm.get('description')?.errors?.required" for="description"
+                class="error">
+                 Description is required.
+              </span>
+              </div>
+              <div class="form-group">
+                <label>Select Connection</label>
+                <ng-multiselect-dropdown #multiSelect
+                  [formControlName]="'selectedConnectionList'"
+                  [placeholder]="'Select Connections'"
+                  [settings]="dropdownSettings"
+                  [data]="userConnectionList"
+                  >
+              </ng-multiselect-dropdown>
+
+              </div>
+              <hr />
+              <div class="text-center" style="padding: 0 20px;">
+                <input type="submit" (click)="submitForm()" class="btn btn-dark-green btn-lg text-uppercase btn-circle btn-block" value="Create Group">
+              </div>
+          </div>
+        </div>
+        <!-- Create New Group End -->
+    </div>
+  </div>
+
+  <ng-template #templateConfirm >
+            <div class="modal-body">
+              <button type="button" class="close" (click)="decline()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <i class="text-warning fas fa-exclamation-triangle" style="font-size:60px;"></i>
+              <h5 class="text-warning text-uppercase mt20">Do you want to confirm?</h5>
+              <hr/>
+              <button type="button" class="btn btn-secondary mr-2" (click)="confirm()" >Yes</button>
+               <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
+            </div>
+  </ng-template>
+
+  <ng-template #createPostTemplate>
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title semi_bold"><i class="far fa-edit"></i> Create Post</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="decline()"  aria-label="Close">&times;</button>
+      </div>
+     <div class="modal-body">
+        <div  [formGroup]="createPostForm">
+
+          <div class="msgPrv mb20"></div>
+          <div class="form-group">
+              <input class="form-control"  formControlName="groupId" type="hidden">
+              <!-- <textarea class="form-control" formControlName="postContent" rows="3" placeholder="Enter Message"></textarea>
+              -->
+                <ckeditor [config]="ckConfig" formControlName="postContent" [editor]="Editor" formControlName="postContent" ></ckeditor>
+              <span *ngIf="postSubmitted && createPostForm.get('postContent')?.errors?.required" for="messageContent" class="error">
+                This is required.
+              </span>
+            </div>
+            <div class="image-gallery">
+              <div class="row">
+                <div class="col-md-4" *ngFor="let selectedfile of selectedFiles; let i = index">
+                  <div class="gallery-box">
+                      <div class="img-contnr">
+                        <img [src]="selectedfile?.dataUrl" *ngIf="selectedfile?.format === 'image'" alt="" />
+                        <video [src]="selectedfile?.dataUrl" *ngIf="selectedfile?.format === 'video'" height="200" control></video>
+                      </div>
+                      <div class="file_name">{{selectedfile?.fileName}}</div>
+                      <button class="btn btn-outline-danger btn-sm far fa-trash-alt" (click)="deleteImage(i,selectedfile?.fileName)"></button>
+                  </div>
+                  <!--
+                   <div class="text-center">
+                    <label class="customRadio">Make it primary
+                      <input type="radio" formControlName="primaryFiles" value="{{selectedfile?.fileName}}" >
+                      <span class="checkmark"></span>
+                      <span *ngIf="submitted && createPostForm.get('primaryFiles')?.errors?.required" for="primaryFiles" class="error">
+                        This is required.
+                      </span>
+                    </label>
+                  </div>
+                   -->
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="creat_post_attachment_btn cursor-pointer">
+                <input accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.txt,.pdf" type="file" class="form-control" formControlName="postFiles" (change)="handleFileInput($event)" >
+                <div class="btn btn-primary"><i class="fas fa-file"></i> (Documents)</div>
+              </div>
+              <div class="creat_post_attachment_btn cursor-pointer">
+                <input accept="image/png,image/jpeg" type="file" multiple="true" class="form-control" formControlName="postImages" (change)="handleImageInput($event)" >
+                <div class="btn btn-primary"><i class="fas fa-image"></i> (Images)</div>
+              </div>
+              <div class="creat_post_attachment_btn cursor-pointer">
+                <input accept="video/mp4,video/x-m4v,video/*" type="file" class="form-control" formControlName="postVideos" (change)="handleVideoInput($event)" >
+                <div class="btn btn-primary"><i class="fas fa-video"></i> (Videos)</div>
+              </div>
+              <div class="clearfix"></div>
+              <span *ngIf="exceedNumberOfImages" class="error">
+                 Max 3 images are allowed
+              </span>
+            </div>
+            <!--
+            <div class="form-group">
+              <label>Is Private</label>
+              <input type="checkbox" formControlName="isPrivate">
+            </div>
+            -->
+        <div class="row">
+            <div class="col-sm-12 text-right">
+              <button class="send_btn" name="button" (click)="createPost()">
+                <i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+      </div>
+    </div>
+     </div>
+  </ng-template>
+
+  <ng-template #editGroupTemplate>
+    <div class="modal-content" >
+      <div class="modal-header text-center">
+        <h5 class="modal-title semi_bold"><i class="far fa-edit"></i> Edit Members</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="decline()"  aria-label="Close">&times;</button>
+      </div>
+     <div class="modal-body">
+      <div class="form-group">
+        <h4>{{selectedGroup.groupName}}</h4>
+      </div>
+      <div class="form-group" [formGroup]="editGroupForm">
+        <input class="form-control" formControlName="searchGroupMember" type="text" placeholder="Search Member" name="">
+        <span class="text-muted">Type a Name</span>
+      </div>
+    <div class="edit_member_list">
+          <div class="edit_member" *ngFor="let member of editFormUserList">
+              <div class="avater_ico">
+                <div  *ngIf="member?.profileImageUrl==null">
+                  <img src="assets/images/avatar.png" alt="" />
+                </div>
+                <div *ngIf="member?.profileImageUrl!=null">
+                  <img src="{{env.apiurl}}{{member?.profileImageUrl}}" alt="" />
+                </div>
+              </div>
+              <span>{{member?.firstName}} {{member?.lastName}}</span>
+
+              <button *ngIf="member?.groupMember" type="button" (click)="deleteGroupMember(selectedGroup, member?.userId)" class="btn btn-outline-danger btn-sm"><i class="fas fa-times"></i></button>
+              <i *ngIf="member?.groupMember" class="fas fa-check"></i>
+              <button *ngIf="!(member?.groupMember)" type="button" (click)="editGroupMember(selectedGroup, member?.userId)" class="btn btn-primary btn-sm">+ Add</button>
+          </div>
+      </div>
+    </div>
+    </div>
+    <!-- Loader Start -->
+    <div *ngIf="loading">
+      <div class="loader_content">
+        <div class="loading">
+            <p>Loading</p>
+            <span></span>
+        </div>
+      </div>
+      </div>
+  <!-- Loader End -->
+
+  </ng-template>
+
+</section>
+<!-- Loader Start -->
+<div *ngIf="loading">
+  <div class="loader_content">
+    <div class="loading">
+        <p>Loading</p>
+        <span></span>
+    </div>
+  </div>
+  </div>
+  <!-- Loader End -->

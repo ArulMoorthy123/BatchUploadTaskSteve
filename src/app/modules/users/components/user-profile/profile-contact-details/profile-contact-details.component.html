@@ -1,0 +1,113 @@
+<div class="card profile-basic">
+  <div class="card-body">
+    <div class="row" [formGroup]="basicDetailsForm">
+
+      <!-- 
+      <div class="col-md-6 form-group">
+        <label>First Name <sup class="text-danger">*</sup></label>
+        <input class="form-control" readonly formControlName="firstName" name="firstName" type="text" placeholder=" First name"
+          name="">
+        <span *ngIf="submitted && basicDetailsForm.get('firstName')?.errors?.required" for="firstName"
+          class="error">First Name is required.</span>
+        <span *ngIf="submitted && basicDetailsForm.get('firstName')?.errors?.pattern" for="firstName" class="error">Last
+          Name not valid.</span>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>Last Name <sup class="text-danger">*</sup></label>
+        <input class="form-control" readonly formControlName="lastName" name="lastName" type="text" placeholder="Enter Last name"
+          name="">
+        <span *ngIf="submitted && basicDetailsForm.get('lastName')?.errors?.required" for="lastName" class="error">
+          Last Name is required.
+        </span>
+        <span *ngIf="submitted && basicDetailsForm.get('lastName')?.errors?.pattern" for="lastName" class="error">
+          Last Name not valid.
+        </span>
+      </div>
+      -->
+
+      <div class="col-12 form-group">
+        <h4 class="text-capitalize">{{basicDetailsForm?.value?.firstName}} {{basicDetailsForm?.value?.lastName}}</h4>
+      </div>
+
+      <div class="col-6 form-group">
+        <label>Nationality</label>
+        <input class="form-control " formControlName="nationality" name="nationality" type="text" placeholder="Nationality">
+      </div>
+
+      <div class="col-6 form-group">
+        <label>Gender</label>
+        <select class="form-control" formControlName="gender" name="gender">
+          <option *ngFor="let item of optGender | keyvalue : originalOrder" [value]="item?.value">{{item?.key}}</option>
+        </select>
+      </div>
+
+      <div class="col-12 separator"></div>
+
+      <div class="col-md-6 form-group">
+        <label>Email Id</label>
+        <div class="form-control">{{basicDetailsForm.value.emailId}}</div>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>Mobile No. </label>
+        <input class="form-control" maxlength="10" formControlName="mobileNumber" type="text"
+          placeholder="Mobile No.">
+        <span *ngIf="submitted && basicDetailsForm.get('mobileNumber')?.errors?.required" for="mobileNumber"
+          class="error">
+          Mobile Number is required.
+        </span>
+      </div>
+
+      <div class="col-12 separator"></div>
+
+      <div class="col-md-6 form-group">
+        <label>Address Line 1</label>
+        <textarea class="form-control" type="text" formControlName="addressLine1" name="addressLine1"
+          placeholder="Address Line 1"></textarea>
+      </div>
+      <div class="col-md-6 form-group">
+        <label>Address Line 2</label>
+        <textarea class="form-control" type="text" formControlName="addressLine2" name="addressLine2"
+          placeholder="Address Line 2"></textarea>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>City<sup class="text-danger">*</sup></label>
+        <input class="form-control" type="text" formControlName="city" name="city" placeholder="City">
+        <span *ngIf="submitted && basicDetailsForm.get('city')?.errors?.required" for="city" class="error">
+          City is required.
+        </span>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>State<sup class="text-danger">*</sup></label>
+        <input class="form-control" type="text" placeholder="State" formControlName="state" name="state">
+        <span *ngIf="submitted && basicDetailsForm.get('state')?.errors?.required" for="state" class="error">State is
+          required.</span>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>PIN/ZIP code<sup class="text-danger">*</sup></label>
+        <input class="form-control" type="text" formControlName="zipCode" name="zipCode" placeholder="ZIP code">
+        <span *ngIf="submitted && basicDetailsForm.get('zipCode')?.errors?.required" for="zipCode" class="error">
+          ZIP code is required.
+        </span>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <label>Country<sup class="text-danger">*</sup></label>
+        <input class="form-control" type="text" formControlName="country" name="country" placeholder="Country">
+        <span *ngIf="submitted && basicDetailsForm.get('country')?.errors?.required" for="country" class="error">
+          Country is required.
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="card-footer text-center">
+    <button type="button" [disabled]="loading" (click)="submitForm()" class="btn  btn-dark-green text-uppercase">Submit
+      <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> </button>
+  </div>
+</div>

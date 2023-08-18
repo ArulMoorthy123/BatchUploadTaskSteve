@@ -1,0 +1,78 @@
+<div id="profile_info" class="profile_infoAc" *ngIf="currentDialogueId && currentDialogue">
+  <div class="card mb5">
+    <div class="card-header">
+      <button (click)="toggleModal(true)" class="btn fas fa-times" style="color: #dedede; font-size: 20px;"
+        name="button"></button>
+      <h5 class="card-title">{{currentDialogue?.type==3 ? 'Profile' :'Group' }} Info</h5>
+    </div>
+    <div class="card-body">
+      <div class="grp_profile_photo">
+        <img src="{{ currentDialogue | chatProfileImage }}" alt="" />
+      </div>
+      <div class="grp_title">
+        <h4 class="semi_bold" style="font-size: 20px;">{{currentDialogue?.name}}</h4>
+        <span class="text-muted">Created {{currentDialogue?.created_at | date:'short'}}</span>
+
+        <button *ngIf="currentDialogue?.type !=3" (click)="openGroupModal(groupInfoUpdateTemplate)" class="btn pd0"
+          name="button" data-toggle="modal" data-target="#grpInfo"><i class="fas fa-pen"></i></button>
+      </div>
+      <p class="pt5">{{ currentDialogue?.data?.description || '' }}</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="currentDialogue">
+    <div class="card mb5" *ngIf="currentDialogue?.type !=3">
+      <div class="card-body">
+        <div class="participant_head">
+          <h6>{{currentDialogue.occupants_ids.length}} Member</h6>
+          <button class="btn" name="button" (click)="addNewMember()" data-toggle="modal" data-target="#grpMember"><i
+              class="fas fa-user-plus"></i></button>
+        </div>
+        <div class="edit_member_list">
+          <ng-container *ngFor="let userId of currentDialogue.occupants_ids">
+            <div class="edit_member">
+              <div class="avater_ico"><img [src]="userId | chatProfileImage" alt=""></div>
+              <span>{{userId | chatProfileName | async }} </span>
+              <button type="button" *ngIf="self_qbid==currentDialogue?.user_id  && userId !=self_qbid"
+                (click)="openConfirmModal(templateConfirm,'remove',userId)" class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-times"></i>
+              </button>
+              <span *ngIf="userId==currentDialogue?.user_id" class="txt-admin">(Admin)</span>
+            </div>
+          </ng-container>
+
+        </div>
+        <button *ngIf="self_qbid !=currentDialogue?.user_id" (click)="openConfirmModal(templateConfirm,'leave')"
+          class="btn btn-danger btn-block btn-sm" name="button"><i class="fas fa-sign-out-alt"></i> Leave
+          Group</button>
+        <button *ngIf="self_qbid==currentDialogue?.user_id" (click)="openConfirmModal(templateConfirm,'delete')"
+          class="btn btn-danger btn-block btn-sm" name="button"><i class="fas fa-trash"></i>
+          Delete Group</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<!-- Profile Info start -->
+
+
+<!-- Group Info edit model start -->
+<ng-template #groupInfoUpdateTemplate>
+  <app-update-group-info [dialogueId]="currentDialogueId" (onCloseEvent)="closeGroupModal($event)">
+  </app-update-group-info>
+</ng-template>
+<!-- Group Info edit model end -->
+
+
+
+<ng-template #templateConfirm>
+  <div class="modal-body">
+    <button type="button" class="close" (click)="closeConfirmModal()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <i class="text-warning fas fa-exclamation-triangle" style="font-size:60px;"></i>
+    <h5 class="text-warning text-uppercase mt20">{{confirm_message}}</h5>
+    <hr />
+    <button type="button" class="btn btn-secondary mr-2" (click)="acceptConfirm()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="closeConfirmModal()">No</button>
+  </div>
+</ng-template>

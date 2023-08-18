@@ -1,0 +1,54 @@
+<div class="modal-content">
+  <div class="modal-header text-center">
+    <h5 class="modal-title semi_bold"><i
+        class="far fa-edit"></i>{{action== 'newGroup' ? 'New Group' : ' Add New Member' }}</h5>
+    <button type="button" class="close" (click)="closeModal()" data-dismiss="modal" aria-label="Close">&times;</button>
+  </div>
+  <div class="modal-body " [formGroup]="groupForm" *ngIf="!loaderContent">
+    <div class="row bg-light mb15" *ngIf="action=='newGroup'">
+      <div class="col-12">
+        <div class="form-group" style="margin-top: 1rem;">
+          <input type="text" class="form-control" placeholder="Enter Group Name..." formControlName="groupname">
+          <span *ngIf="groupForm.get('groupname')?.errors?.required && submitted" for="groupname" class="error">
+            Group Name is required.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search..." formControlName="search">
+    </div>
+
+    <div class="edit_member_list">
+      <div *ngFor="let u of filterContacts | filter :groupForm.get('search').value : 'firstName': 'lastName'; let i=index;   "
+        class="edit_member">
+        <div class="avater_ico">
+          <img src="{{u?.qbid | chatProfileImage }}" alt="{{u?.firstName}}">
+        </div>
+        <span>{{u?.firstName }} {{u.lastName?u.lastName : ''}}</span>
+        <div class="flex-grow-1 text-right">
+          <input id="box-{{i}}" type="checkbox" [value]="u.qbid" (change)="onCheckboxChange($event)">
+        </div>
+      </div>
+    </div>
+  </div> <!-- body close-->
+
+  <div *ngIf="!loaderContent" class="modal-footer">
+    <span *ngIf="groupForm.get('contactlist')?.errors?.required && submitted " for="groupname" class="error pull-left">
+      Please select a member from list.
+    </span>
+    <ng-container *ngIf="action=='newGroup'">
+      <button type="button pull-right" (click)="createNewChat()" class="btn btn-success " [disabled]="loader">
+        <i *ngIf="loader" class="fa fa-spinner"></i> <i class="fas fa-check"></i> Create </button>
+    </ng-container>
+
+    <ng-container *ngIf="action=='addNewMember'">
+      <button type="button pull-right" (click)="addNewMember()" class="btn btn-success " [disabled]="loader">
+        <i *ngIf="loader" class="fa fa-spinner"></i> Add </button>
+    </ng-container>
+  </div>
+
+  <div *ngIf="loaderContent" class="fetching mt20 mb20" style="text-align: center"><i class="fa fa-spinner fa-spin"></i></div>
+
+</div>

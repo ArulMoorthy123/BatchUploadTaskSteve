@@ -1,0 +1,97 @@
+<div class="session-create modal-content">
+  <div class="modal-header text-center">
+    <h5 class="modal-title semi_bold">{{sessionId? 'Update' : 'Create New'}} Session</h5>
+    <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+  </div>
+  <div class="modal-body mb-5" [formGroup]="sessionForm">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <div class="form-group">
+            <label for="title">Session Title <sup class="text-danger">*</sup></label>
+            <input type="text" formControlName="title" class="form-control" placeholder="Session Title">
+            <span *ngIf="sessionForm.get('title')?.errors?.required && submitted" for="title" class="error">
+              Session Title is Required
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label for="desc">Session Description <sup class="text-danger">*</sup></label>
+          <textarea formControlName="desc" class="form-control" rows="3" placeholder="Session Description"> </textarea>
+          <span *ngIf="sessionForm.get('desc')?.errors?.required && submitted" for="desc" class="error">
+            Description is Required
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <div class="form-group">
+            <label for="invites">Select Invitees <sup class="text-danger">*</sup></label>
+            <ng-multiselect-dropdown *ngIf="updateDropdown" formControlName="invites" [settings]="dropdownSettings"
+              [data]="contactList">
+            </ng-multiselect-dropdown>
+            <span *ngIf="sessionForm.get('invites')?.errors?.required && submitted" for="dueTime" class="error">
+              Please select the invitees.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-sm-5">
+              <label for="sessionDate">Session Date & Time<sup class="text-danger">*</sup></label>
+              <input type="datetime-local" formControlName="sessionDate" class="form-control"
+              [min]="minDate">
+              <span *ngIf="sessionForm.get('sessionDate')?.errors?.required && submitted" for="dueDate" class="error">
+                Valid Date & Time is required.
+              </span>
+            </div>
+
+            <div class="col-sm-2">
+              <label for="sessionDate">Duration<sup class="text-danger">*</sup></label>
+              <select formControlName="duration" class="form-control">
+                <option *ngFor="let duration of SESSION_TIME.DURATION | keyvalue : originalOrder"
+                  [value]="duration.key">
+                  {{duration.value}}
+                </option>
+              </select>
+              <span *ngIf="sessionForm.get('duration')?.errors?.required && submitted" for="dueTime" class="error">
+                Session duration is required
+              </span>
+            </div>
+
+            <div class="col-sm-5">
+              <label for="timeZone">Time Zone <sup class="text-danger">*</sup></label>
+              <select class="form-control" formControlName="timeZone">
+                <option *ngFor="let tz of minTimeZone" [value]="tz.code">{{ tz.label }}</option>
+              </select>
+              <span *ngIf="sessionForm.get('timeZone')?.errors?.required && submitted" for="timeZone" class="error">
+                Time Zone is Required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer justify-content-center">
+    <button [disabled]="loading" type="button" class="btn btn-outline-secondary" (click)="closeModal()">
+      <i *ngIf="loading" class="fa fa-spinner fa-spin mr-2"></i>Cancel</button>
+    <button [disabled]="loading" (click)="submitSession()" type="button" class="btn btn-primary"><i *ngIf="loading"
+        class="fa fa-spinner fa-spin mr-2"></i>
+      {{sessionId? 'Update':'Create'}}</button>
+  </div>
+
+</div>

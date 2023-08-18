@@ -1,0 +1,31 @@
+<div class="card plan-item m-3 {{plans.status}}">
+  <div class="card-header d-flex justify-content-between">
+    <h5 class="card-title flex-grow-1" (click)="viewPlan(plans.id)" >{{plans.title}}</h5>
+    <div class="action">
+      <ng-container *ngIf="ENABLE_DELETE && plans.created_by === currentUser.id">
+        <a tooltip="Delete Plan" placement="bottom" show-delay="1000" (click)="onDeletePlan()"
+          class="btn btn-link delete">
+          <i class="far fa-trash-alt"></i></a>
+      </ng-container>
+    </div>
+  </div>
+  <div class="card-body" (click)="viewPlan(plans.id)">
+    <div class="row plan-info">
+      <div class="col-md-4 status">
+        <span class="p-2 mr-2 rounded bg-white field-status">
+          Status: <strong>{{PLAN_FILTER[plans.status]}}</strong>
+        </span>
+      </div>
+      <div class="col-md-4 assigned">
+        <span class="p-2 mr-2 rounded bg-light">
+          Assigned to: <strong>{{plans.assigned_to.name}}</strong>
+        </span>
+      </div>
+      <div class="col-md-4 dueDate d-flex justify-content-end">
+        <span class="p-2 mr-2 rounded bg-light">
+          Due date: <strong [ngClass]="{'text-danger' : passedDue && tab != 'completed'}">{{plans.dueDate | date: 'mediumDate'}}</strong>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

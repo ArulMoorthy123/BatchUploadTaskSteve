@@ -1,0 +1,55 @@
+<div class="plans-create modal-content">
+  <div class="modal-header light-greenBg">
+    <h5 class="modal-title semi_bold"><i class="far fa-check-square"></i>What is the Plan?</h5>
+    <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+  </div>
+  <div class="modal-body" [formGroup]="planForm">
+
+    <div class="form-group">
+      <label>Title <sup class="text-danger">*</sup></label>
+      <input type="text" class="form-control" placeholder="Title" formControlName="title">
+      <span *ngIf="planForm.get('title')?.errors?.required && submitted" for="title" class="error">
+        Title is required.
+      </span>
+    </div>
+    <div class="form-group row">
+      <div class="col-md-6">
+        <label>Due Date <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" placeholder="mm-dd-yyyy" formControlName="dueDate" bsDatepicker
+          [minDate]="minDate">
+        <span *ngIf="planForm.get('dueDate')?.errors?.required && submitted" for="dueDate" class="error">
+          Due Date is required.
+        </span>
+      </div>
+      <div class="col-md-6">
+        <label>Assign to</label>
+        <ng-multiselect-dropdown formControlName="assignedTo" [settings]="dropdownSettings" [data]="connectionList">
+        </ng-multiselect-dropdown>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Shared Document Link (eg., MS SharePoint / Google Document)</label>
+      <a *ngIf="planForm?.value?.sharedDoc_link" class="external-link pl-3 link btn-link"
+        [href]="planForm?.value?.sharedDoc_link" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+      <input type="text" class="form-control" [pattern]="REG_EX.URL" placeholder="Shared Document Link..."
+        formControlName="sharedDoc_link">
+      <span *ngIf="planForm.get('sharedDoc_link')?.errors?.pattern" for="tags" class="error">
+        Should be a valid link.
+      </span>
+    </div>
+    <div class="form-group">
+      <label>Description <sup class="text-danger">*</sup></label>
+      <textarea class="form-control" placeholder="Description..." formControlName="description" rows="3"></textarea>
+      <span *ngIf="planForm.get('description')?.errors?.required && submitted" for="description" class="error">
+        Description is required.
+      </span>
+    </div>
+
+  </div>
+  <div class="modal-footer text-right">
+    <button (click)="closeModal()" class="btn btn-secondary cancel">Cancel</button>
+    <button (click)="savePlan()" class="btn btn-primary add">Add</button>
+  </div>
+</div>

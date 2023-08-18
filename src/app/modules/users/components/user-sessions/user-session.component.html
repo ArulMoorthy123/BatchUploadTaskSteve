@@ -1,0 +1,21 @@
+
+<div class="container">
+	<div class="row">
+		<h2>Public Session</h2>
+	</div>
+	<span> {{connectionStatus}} </span>
+    <div class="space">	
+    <div class="row">
+	     
+	    <div class="col-md-4"  *ngFor="let col of chatService.coneferenceData; let i=index">
+	        <div class="widget widget-call-to-action well-default">
+                            <h3 class="widget-title">{{col.name}}</h3>
+                                <p class="text-white">{{col.description}}</p>
+                                <button *ngIf="!col.callStatus" class="btn btn-white btn-lg" (click)="makeCall(col)">Call</button>
+                                <button *ngIf="col.callStatus" class="btn btn-white btn-lg" (click) ="joinCall(col)">Join Call</button>
+                    </div>
+	        
+	    </div>
+	  
+	</div></div>
+</div>

@@ -1,0 +1,84 @@
+<!-- <div class="modal fade" [style.display]="videoModal ? 'block' :'none'" [class.show]="videoModal" style="display: none"> -->
+<!-- <ng-template #privateCallTemplate>
+    <div class="full-screen-modal ">
+      <app-private-call (onCloseEvent)="closeVideoModal()" ></app-private-call>
+    </div> -->
+<!-- <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">CJ Video Call</h5> -->
+<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button> -->
+<!-- </div>
+      <div class="modal-body">
+        <div class="row" *ngIf="qbvideo.currentFeed">
+          <div class="col-4" *ngFor="let u of userFeedData">
+            <div class="video-container">
+              <video class="video" id="callerStream_{{u.user_id}}" poster="assets/images/avatar2.png" autoplay playsinline>
+                
+              </video>
+            </div>
+            <p>video from {{getUserName(u?.user_id)}}</p>
+          </div>
+        </div>
+      </div> -->
+<!-- <span *ngIf="qbvideo.currentVideoSession"> {{qbvideo.currentVideoSession._getSeconds()}}</span> -->
+
+<!-- <button (click)="qbvideo.shareCamera()" class="btn">camera</button>
+      <button (click)="qbvideo.stopScreenSharing()" class="btn">stop share</button>
+      <button type="button" *ngIf="qbvideo.videoStatus" class="btn btn-danger" data-dismiss="modal" (click)="toggleStream('video')">Mute Video</button>
+      <button type="button" *ngIf="!qbvideo.videoStatus" class="btn btn-danger" data-dismiss="modal" (click)="toggleStream('video',true)">UnMute Video</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="shareScreen()">Share Screen</button>
+
+      <div class="modal-footer" style="text-align: right;">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="endcall()">End Call</button>
+      </div>
+    </div> -->
+
+<!-- </ng-template> -->
+<!-- /.modal-content -->
+
+
+<div class="modal fade " [style.display]="videoModal ? 'block' :'none'" [class.show]="videoModal" style="display: none">
+  <div class="full-screen-modal">
+    <div class="modal-content">
+      <!-- <app-private-call #privateCall (onCloseEvent)="closeVideoModal()"></app-private-call> -->
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+
+<ng-template #PrivateCallTemplate>
+  <app-private-call #privateCall (onCloseEvent)="closeVideoModal()"></app-private-call>
+</ng-template>
+
+
+<!-- <div class="modal fade"  [style.display]="income_call_modal ? 'block' :'none'" [class.show]="income_call_modal" style="display: none"   tabindex="-1" data-backdrop="static" data-keyboard="false"> -->
+<!-- <div class="modal-dialog modal-sm"> -->
+<ng-template #incomingTemplate>
+  <div class="modal-content">
+    <div class="modal-header text-center">
+      <h4>{{incomingMessage.isAudioOnly == "true" ? 'Audio' : 'Video' }} Call from <strong class="j-ic_initiator">{{incomingFromText | titlecase}}!</strong></h4>
+    </div>
+
+    <div class="modal-footer text-center">
+      <button type="button" (click)="reject()" class="btn btn-danger j-decline">Decline</button>
+      <button type="button" (click)="acceptCall()" class="btn btn-success j-accept">Accept</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #incomingSessionTemplate>
+  <div class="modal-content">
+    <div class="modal-header text-center">
+      <h4>Session call  from <strong class="j-ic_initiator">{{incomingSessionData?.title | titlecase}}!</strong></h4>
+    </div>
+
+    <div class="modal-footer text-center">
+      <button type="button" (click)="toggleIncomingSessionModal(false)" class="btn btn-danger j-decline">Decline</button>
+      <button type="button" (click)="acceptSession()" class="btn btn-success j-accept">Accept</button>
+    </div>
+  </div>
+</ng-template>

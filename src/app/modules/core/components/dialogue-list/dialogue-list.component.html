@@ -1,0 +1,22 @@
+<!-- <div class="scroll-pane panel-list" *ngIf="dialogueList.length"> -->
+<ng-container *ngIf="dialogueList.length">
+  <li class="nav-item" *ngFor="let contact of dialogueList">
+    <a href="javascript:;" (click)="showChat(contact)" class="nav-link" [class.active]="contact._id==selectedDialogueId"
+      data-toggle="tab" role="tab" aria-selected="true">
+      <div class="avater_ico">
+        <img src="{{ getProfileUrl(contact) }}">
+      </div>
+      <span class="unread_count" *ngIf="contact.unread_messages_count">{{contact.unread_messages_count}}</span>
+      <div class="chat_ib">
+        <h5>{{contact.name}}
+          <!-- <span class="user_status active"></span> -->
+        </h5>
+        <p [innerHTML]='contact.last_message | dialogueNotification'></p>
+        <!-- <p *ngIf="contact.last_message == '[attachment]'"><i class="fas fa-paperclip"></i></p> -->
+        <span class="chat_date">{{contact.last_message_date_sent | chatDateFormat}}</span>
+        <!-- <button type="button" class="delete_cht" title="Delete Chat"><i
+                                      class="fa fa-trash"></i></button> -->
+      </div>
+    </a>
+  </li>
+</ng-container>

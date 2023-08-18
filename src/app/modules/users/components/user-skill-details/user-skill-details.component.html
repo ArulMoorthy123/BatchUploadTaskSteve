@@ -1,0 +1,16 @@
+<form [formGroup]="skillDeatilForm">
+  <ng-multiselect-dropdown
+      [placeholder]="'Select Skills'"
+      [settings]="dropdownSettings"
+      [data]="skills"
+      formControlName="skill"
+      [disabled]="disabled"
+      (onSelect)="onItemSelect($event)"
+      (onFilterChange) ="onFilterChange($event)" >
+  </ng-multiselect-dropdown>
+  <div class="form_bottom">
+    <button type="submit" (click)="submitForm()"
+     class="btn  btn-dark-green text-uppercase">Submit
+     </button>
+   </div>
+</form>

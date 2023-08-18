@@ -1,0 +1,110 @@
+<div class="modal-content private-call">
+  <div class="modal-header">
+    <div>
+      <h5 class="mb-0">{{conferenceData?.title}}</h5>
+      <span class="conf-duration">Call duration: {{ ChatService.callTimeSec | secToTime }}</span>
+    </div>
+    <button type="button" (click)="endCall()" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+  </div>
+
+  <div class="modal-body conference grey-bg">
+
+    <div class="conf-pane">
+      <div class="conf-container container-fluid container-scroll">
+        <div class="row">
+          <div class="col-12" [hidden]="!expanded_video_selected || GRID_MODE">
+            <video class="conf-video" [id]="MAIN_STREAM_ID" autoplay playsinline></video>
+          </div>
+        </div>
+        <div class="row">
+          <div class="nopadding b-padding" [hidden]="!SHOW_LOCAL_STREAM && expanded_video_selected"
+            [ngClass]="{'col-md-12': grid_number==1, 'col-md-6': grid_number==2, 'col-md-4': grid_number==3, 'col-md-3': grid_number==4}">
+
+            <video [hidden]="IS_LOCAL_STREAM_SCREEN_SHARE || getLocalMuteStatus(false)" width="100%" class="conf-video" id="localVideo" autoplay
+              playsinline></video>
+            <ng-container *ngIf="IS_LOCAL_STREAM_SCREEN_SHARE || getLocalMuteStatus(false)">
+              <div class="conf-audio">
+                <img class="conf-img" src="{{ChatService.selfUser?.profileImageUrl | userProfileImage }}" alt="">
+              </div>
+            </ng-container>
+            <!-- <div class="spinner-border text-light" style="position: fixed; margin-top: 4rem" role="status" [hidden]="col.isConnected">
+            <span class="sr-only">Loading...</span>
+          </div>
+           -->
+          </div>
+          <ng-container [hidden]="!GRID_MODE">
+            <ng-container *ngFor="let col of ChatService.streams; let i=index">
+              <div class="nopadding b-padding" *ngIf="col.element_id !==MAIN_STREAM_ID" (click)="selectStream(col)"
+                [ngClass]="{'col-md-12': grid_number==1, 'col-md-6': grid_number==2, 'col-4-md': grid_number==3, 'col-md-3': grid_number==4}">
+                <video width="100%" [hidden]="!col.isConnected || col.muteStatus(true,false)" class="conf-video" [id]="col.element_id" autoplay
+                  playsinline>
+                </video>
+                <ng-container *ngIf="!col.isConnected || col.muteStatus(true,false)">
+                  <div class="conf-audio">
+                    <img class="conf-img" [src]="col.getUserData()?.profileImageUrl | userProfileImage" alt="">
+                  </div>
+                </ng-container>
+
+                <!-- <div class="spinner-border text-light" style="position: fixed; margin-top: 4rem" role="status"
+                  [hidden]="col.isConnected">
+                  <span class="sr-only">Loading...</span>
+                </div> -->
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="conf-container conf-message" [hidden]="show_chat==false">
+      <ng-container *ngIf="conferenceData?.groupid">
+        <app-mesibo-messenger class="message-container" [showChat]="show_chat" [hidden]="!show_chat"
+          [groupId]="conferenceData.groupid">
+        </app-mesibo-messenger>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+  <div class="modal-footer">
+    <div class="call-controls-inner">
+      <ng-container *ngIf="ChatService.publisherSession.media">
+        <button class="btn controls btn-plain"
+          [class.active]="!IS_LOCAL_STREAM_SCREEN_SHARE && !ChatService.publisherSession.muteStatus(true,false)"
+          (click)="toggeleVideo()">
+          <i class="fas"
+            [ngClass]="{'fa-video ': !IS_LOCAL_STREAM_SCREEN_SHARE && ChatService.publisherSession.muteStatus(true,false),'fa-video-slash' : !IS_LOCAL_STREAM_SCREEN_SHARE && !ChatService.publisherSession.muteStatus(true,false)}"></i>
+          <!-- *ngIf="!videoStatus"  -->
+        </button>
+
+        <button class="btn controls btn-plain" [class.active]="ChatService.publisherSession.muteStatus()==false"
+          (click)="ChatService.toggleSelfAudio()">
+          <i class="fa"
+            [ngClass]="{'fa-microphone ': ChatService.publisherSession.muteStatus()==false,'fa-microphone-slash' : ChatService.publisherSession.muteStatus()==true}"></i>
+        </button>
+
+        <!-- <ng-container *ngIf="!currentCall.isAudioOnly"> -->
+        <button (click)="shareScreen()" [class.active]="IS_LOCAL_STREAM_SCREEN_SHARE"
+          class="btn share-screen controls btn-plain">
+          <i class="fas fa-desktop"></i>
+          <!-- <span>Share Screen</span> -->
+        </button>
+        <!-- </ng-container> -->
+      </ng-container>
+      <button class="btn active controls btn-plain" (click)="endCall()">
+        <i class="fas fa-phone" style="transform: rotate(226deg);"></i>
+        <!-- <span>End Call</span> -->
+      </button>
+
+      <button class="btn active controls btn-plain" *ngIf="!GRID_MODE" (click)="restoreGrid()">
+        <i class="fas fa-bars"></i>
+        <!-- <span>End Call</span> -->
+      </button>
+      <!-- [disabled]="userFeedData.length==1 || !userFeedData" -->
+      <button class="btn controls btn-plain" (click)="toggleChat()" [class.active]="show_chat" name="button">
+        <i class="far fa-comment"></i>
+      </button>
+    </div>
+  </div>
+</div>

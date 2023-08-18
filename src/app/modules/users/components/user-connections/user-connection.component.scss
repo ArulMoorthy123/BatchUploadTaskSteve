@@ -1,0 +1,101 @@
+.connection-mod {
+  .filter {
+    display: flex;
+    .filter- {
+      &sort,
+      &search {
+        display: flex;
+        width: 100%;
+        padding: 0 10px;
+        label {
+          display: flex;
+          width: 25%;
+          margin: 0;
+        }
+      }
+    }
+  }
+  .connection {
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    &.row:hover {
+      background-color: #fafafa;
+    }
+    &.widget {
+      .details {
+        .name {
+          font-size: 14px;
+        }
+      }
+    }
+    .details {
+      .name {
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
+    .actions {
+      .btn-message {
+        i {
+          color: #3598db;
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+  .alert-message {
+    padding: 25px 0;
+    @extend .color-dim;
+  }
+  .each-invite {
+    &.sent-invite {
+      padding-top: 15px;
+    }
+    .connection {
+      margin: 0;
+      padding: 0 0 10px 0;
+    }
+    &:hover {
+      background-color: #fafafa;
+    }
+    .ignore {
+      padding-right: 10px;
+    }
+    .btn-cancel,
+    .ignore {
+      i {
+        color: #d6d6d6;
+      }
+    }
+  }
+}
+.avatar-wd {
+  width: 60px;
+}
+.connections {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.search-info {
+  font-size: smaller;
+  @extend .color-dim;
+}
+.color-dim {
+  color: #666666;
+}
+
+@media only screen and (max-width: 576px) {
+  .connection-mod {
+    .filter {
+      display: block;
+      .filter- {
+        &sort,
+        &search {
+          padding: 5px 0;
+          display: block;
+        }
+      }
+    }
+  }
+}

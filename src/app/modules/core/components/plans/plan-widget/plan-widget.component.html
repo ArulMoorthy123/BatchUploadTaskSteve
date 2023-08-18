@@ -1,0 +1,22 @@
+<ng-container *ngIf="planList?.length">
+  <div class="card plan-widget">
+    <div class="card-header">
+      <a routerLink="/plans" class="d-flex justify-content-between text-decoration-none">
+        <h5 class="card-title"><i class="fas fa-tasks"></i> My Plans</h5>
+        <h5 class="card-title"><i class="fas fa-chevron-right"></i></h5>
+      </a>
+    </div>
+    <div class="card-body plans p-0">
+      <ng-container *ngFor="let plan of planList">
+        <div class="plan mt-1 py-2" [ngClass]="plan.status.toUpperCase()">
+          <div class="plan-item py-1 mx-3 d-flex justify-content-between">
+            <a routerLink="/plans" class="d-flex flex-grow-1 text-decoration-none">
+              <span class="ellipsis-2ln text-dark pr-2">{{plan?.title}}</span>
+            </a>
+            <div class="dt" >{{plan.dueDate | date: 'M/d'}}</div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

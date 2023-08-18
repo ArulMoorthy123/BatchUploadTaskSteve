@@ -1,0 +1,278 @@
+<div class="card card_blue sare_content content-mod " [formGroup]="createPostForm">
+  <div class="card-header blue_bg">
+    <h5 class="card-title text-capitalized">Hi {{currentUser.firstName}}!</h5>
+  </div>
+  <div class="card-body">
+    <textarea class="form-control mb10" formControlName="postContent" rows="2" maxlength="200"
+      placeholder="Share content..."></textarea>
+    <span *ngIf="postSubmitted && createPostForm.get('postContent')?.errors?.required" for="messageContent"
+      class="error">
+      Content is empty.
+    </span>
+    <div class="image-gallery">
+      <div class="row">
+        <div class="col-4" *ngFor="let selFile of selectedFiles; let i = index">
+          <div class="gallery-box">
+            <div class="img-contnr">
+              <img [src]="selFile?.dataUrl" *ngIf="selFile?.format === 'image'" alt="" />
+              <video [src]="selFile?.dataUrl" *ngIf="selFile?.format === 'video'" height="200" controls></video>
+            </div>
+            <div class="file_name">{{selFile?.fileName}}</div>
+            <button class="btn btn-outline-danger btn-sm far fa-trash-alt"
+              (click)="deleteImage(i,selFile?.fileName)"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-9">
+        <button class="btn btn-link" (click)="addMediaPopUp(addMediaTemplate)"><i class="fas fa-paperclip"></i>
+          <span class="d-none d-md-inline"> Add Media</span></button>
+        <button class="btn btn-link" (click)="tagUserPopUp(tagUserTemplate)"><i class="fas fa-user-secret"></i>
+          <span class="d-none d-md-inline"> Who can see your post?</span></button>
+      </div>
+      <div class="col-3 text-right">
+        <button class="btn btn-primary" (click)="createPost()">Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Share Content End -->
+<!-- Activity -->
+<div class="card">
+  <div class="card-header light-greenBg">
+    <h5 class="card-title"><i class="fab fa-readme"></i> Content</h5>
+  </div>
+  <div class="card-body post_cont" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="true">
+    <div class="post_contnt each-post" *ngFor="let content of itemsToShow">
+
+      <div class="post-head d-flex">
+        <div class="avatar-wd">
+          <div class="avater_ico">
+            <img src="{{env.apiurl}}{{content?.profileImageUrl}}" onerror="this.src='assets/images/avatar.png';"
+              alt="" />
+          </div>
+        </div>
+        <div class="post-info d-flex flex-grow-1 justify-content-between">
+          <div class="post-user cursor-pointer" (click)="openViewProfilePopUp(content, templateProfile)">
+            <div class="name font-weight-bold text-capitalize">{{content?.strCreatedBy}}</div>
+            <div class="dt-time"><i class="far fa-clock"></i>
+              {{content?.createdDate | date:'medium'}}</div>
+          </div>
+          <ng-container *ngIf="content?.createdBy==currentUser.id">
+            <button class="btn btn-sm no-border" tooltip="Delete Post"
+              (click)="openConfirmDeletePopUp(content?.id,templateConfirm)"><i
+                class="fa fa-times ignore-color"></i></button>
+          </ng-container>
+        </div>
+      </div>
+      <div class="content-text text-weight-bold post" [innerHtml]="content?.content"></div>
+
+      <div *ngIf="content?.urlList?.length" class="post_media post-attachments"
+        [ngClass]="{'two': content?.urlList.length==2,'three': content?.urlList.length==3}">
+        <div *ngFor="let postMedia of content?.urlList; let i=index">
+          <div class="post_document" *ngIf="postMedia?.type==='document'">
+            <a href="{{env.apiurl+postMedia?.url}}" class="btn btn-outline-secondary btn-sm">
+              <i class="red_txt far fa-file-word"></i>
+              Download ({{postMedia?.url.split("/").pop()}})
+            </a>
+          </div>
+          <span *ngIf="postMedia?.type==='image'" class="cursor-pointer"
+            (click)="openMediaPopUp(content?.urlList,templateMedia)">
+            <img src="{{env.apiurl+postMedia?.url}}" alt="" class="imgal-img" />
+          </span>
+          <span *ngIf="postMedia?.type==='video'" class="cursor-pointer"
+            (click)="openMediaPopUp(content?.urlList,templateMedia)">
+            <video src="{{env.apiurl+postMedia?.url}}" height="200"></video>
+          </span>
+        </div>
+      </div>
+
+      <div class="msg_bot add-comment">
+        <div class="view-comments text-right">
+          <a *ngIf="content?.commentList.length>0" class="btn btn-link" (click)="toggleListComment(content)">
+            <i class="fas fa-comment"></i>
+            {{content?.commentList?.length}}{{content?.commentList?.length === 1 ? ' Comment' : ' Comments'}}
+          </a>
+        </div>
+        <!-- Add Comment start -->
+        <div [formGroup]="postCommentForm" class="add_comment" style="display: block;">
+          <div class="avater_ico">
+            <img src="{{env.apiurl}}{{currentUser?.profileImageUrl}}" onerror="this.src='assets/images/avatar.png';"
+              tooltip="{{currentUser?.firstName}} {{currentUser?.lastName}}" />
+          </div>
+          <textarea formControlName="commentContent" class="form-control mb-0" rows="1"
+            placeholder="Add a comment..."></textarea>
+          <button tooltip="Post Comment" placement="top" show-delay="500" class="btn btn-link" type="button"
+            (click)="postComment(content.id)"><i class="fas fa-paper-plane"></i></button>
+        </div>
+
+        <!-- Comment List start -->
+        <div class="comments" [ngStyle]="{'display': content.expandTwo ? 'block' : 'none' }">
+          <ng-container *ngFor="let commentData of content?.commentList">
+            <div class="comment">
+              <div class="d-flex">
+                <div class="d-flex avatar-wd">
+                  <div class="avater_ico">
+                    <img src="{{env.apiurl}}{{commentData?.profileImageUrl}}" onerror="this.src='assets/images/avatar.png';"
+                      alt="" />
+                  </div>
+                </div>
+                <div class="post-info d-flex flex-grow-1 justify-content-between">
+                  <div class="post-user cursor-pointer" (click)="openViewProfilePopUp(commentData, templateProfile)">
+                    <div class="name font-weight-bold text-capitalize">{{commentData?.strCreatedByName}}</div>
+                    <div class="dt-time"><i class="far fa-clock"></i>
+                      {{commentData?.createdDate | date:'medium'}}</div>
+                  </div>
+                  <ng-container *ngIf="commentData?.createdBy==currentUser.id">
+                    <button class="btn btn-sm no-border" tooltip="Delete Comment"
+                      (click)="openConfirmCommentDeletePopUp(commentData?.id,templateConfirm)"><i
+                        class="fa fa-times ignore-color"></i></button>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="content-text" [innerHtml]="commentData?.comment"></div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<ng-template #addMediaTemplate>
+  <div role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title">Select media to post!</h5>
+        <button type="button" (click)="decline()" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="media_cont" *ngFor="let selectedfile of selectedFiles; let i = index">
+          <div class="media_sub_cont" *ngIf="selectedfile?.format === 'image'">
+            <img [src]="selectedfile?.dataUrl" alt="" />
+            <div class="media_name"><i class="fas fa-file-image"></i> {{selectedfile?.fileName}}</div>
+            <button class="remove_media" name="button" (click)="deleteImage(i,selectedfile?.fileName)">&times;</button>
+          </div>
+          <div class="media_sub_cont" *ngIf="selectedfile?.format === 'video'">
+            <video [src]="selectedfile?.dataUrl" height="200" control></video>
+            <div class="media_name"><i class="fas fa-file-video"></i> {{selectedfile?.fileName}}</div>
+            <button class="remove_media" name="button" (click)="deleteImage(i,selectedfile?.fileName)">&times;</button>
+          </div>
+          <div class="media_doc media_sub_cont" *ngIf="selectedfile?.format === 'document'">
+            <div class="media_name"><i class="fas fa-file"></i> {{selectedfile?.fileName}}</div>
+            <button class="remove_media" name="button" (click)="deleteImage(i,selectedfile?.fileName)">&times;</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 post_nav space-around">
+            <div class="btn btn-circle no-border">
+              <input accept="image/png,image/jpeg" type="file" multiple="true" class="form-control" name="postImages"
+                (change)="handleImageInput($event)">
+              <i class="text-primary fas fa-2x fa-camera"></i>
+            </div>
+            <div class="btn btn-circle no-border">
+              <input accept="video/mp4,video/x-m4v,video/*" type="file" class="form-control" name="postVideos"
+                (change)="handleVideoInput($event)">
+              <i class="text-success fas fa-2x fa-video"></i>
+            </div>
+            <div class="btn btn-circle no-border">
+              <input accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.txt,.pdf" type="file" class="form-control"
+                name="postFiles" (change)="handleFileInput($event)">
+              <i class="text-warning fas fa-2x fa-file"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer text-center">
+        <span *ngIf="exceedNumberOfImages" class="error">
+          Max 3 images are allowed
+        </span>
+        <button (click)="decline()" class="btn btn-primary ">Add Media</button>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<ng-template #templateProfile>
+  <div class="modal-content">
+    <div class="modal-header light-greenBg">
+      <h5 class="modal-title semi_bold"><i class="fas fa-address-card"></i> Profile</h5>
+      <button type="button" class="close" data-dismiss="modal" (click)="decline()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <user-view-profile [userId]='userProfileId'> </user-view-profile>
+    </div>
+  </div>
+</ng-template>
+<ng-template #tagUserTemplate>
+  <div class="modal-content">
+    <div class="modal-header text-center">
+      <h5 class="modal-title">Select Connections</h5>
+      <button type="button" class="close" data-dismiss="modal" (click)="decline()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body sec-privacy">
+
+      <div [formGroup]="tagPrivacyForm">
+        <div class="text-center">
+          <label class="customRadio mr-3">
+            <input type="radio" value="1" formControlName="privacyType">
+            <span class="checkmark"></span>
+            All my Connections
+          </label>
+          <label class="customRadio">
+            <span class="checkmark"></span>
+            <input type="radio" value="2" formControlName="privacyType">
+            Selected Connections
+          </label>
+        </div>
+        <div class="form-group" *ngIf="!hideConnectionBox">
+          <label>Select Connection</label>
+          <ng-multiselect-dropdown #multiSelect [formControlName]="'selectedConnectionList'"
+            [placeholder]="'Select Connections'" [settings]="dropdownSettings" [data]="userConnectionList">
+          </ng-multiselect-dropdown>
+
+        </div>
+      </div>
+    </div>
+    <div class=" modal-footer text-center">
+      <button (click)="decline()" class="btn btn-primary">Save</button>
+    </div>
+
+  </div>
+</ng-template>
+<!-- Activity End -->
+<ng-template #templateConfirm>
+  <div class="modal-body">
+    <button type="button" class="close" (click)="decline()" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <i class="text-warning fas fa-exclamation-triangle" style="font-size:60px;"></i>
+    <h5 class="text-warning text-uppercase mt20">Do you want to confirm?</h5>
+    <hr />
+    <button type="button" class="btn btn-secondary mr-2" (click)="confirm()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="decline()">No</button>
+  </div>
+</ng-template>
+<ng-template #templateMedia>
+  <div class="modal-body postCaraousal">
+    <carousel>
+      <slide *ngFor="let postMedia of postMediaList">
+        <img *ngIf="postMedia?.type==='image'" src="{{env.apiurl}}{{postMedia?.url}}" alt="first slide">
+        <video *ngIf="postMedia?.type==='video'" src="{{env.apiurl}}{{postMedia?.url}}" height="400" controls></video>
+      </slide>
+    </carousel>
+  </div>
+</ng-template>
+<!-- Loader Start -->
+<div *ngIf="loading">
+  <div class="loader_content">
+    <div class="loading">
+      <p>Loading</p>
+      <span></span>
+    </div>
+  </div>
+</div>
+<!-- Loader End -->
